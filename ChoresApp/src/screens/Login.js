@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,15 +9,31 @@ import {
 import {COLORS} from '../colors';
 
 const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const checkLogin = () => {
+    if (username === 'test' && password === 'test') {
+      alert('Login successful');
+    } else {
+      alert('Wrong username or password');
+    }
+  };
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <Text style={styles.logo}>Chores</Text>
         <Text style={styles.heading}>Login</Text>
         <Text style={styles.text}>Username:</Text>
-        <TextInput style={styles.input}></TextInput>
+        <TextInput
+          style={styles.input}
+          onChangeText={text => setUsername(text)}></TextInput>
         <Text style={styles.text}>Password:</Text>
-        <TextInput style={styles.input}></TextInput>
+        <TextInput
+          style={styles.input}
+          secureTextEntry={true}
+          onChangeText={text => setPassword(text)}></TextInput>
         <View
           style={{
             alignItems: 'center',
@@ -26,7 +42,7 @@ const Login = () => {
             marginTop: 10,
           }}>
           <Text style={styles.link}>Create an account</Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={checkLogin}>
             <Text style={{color: COLORS.white, fontSize: 20}}>Login</Text>
           </TouchableOpacity>
         </View>
