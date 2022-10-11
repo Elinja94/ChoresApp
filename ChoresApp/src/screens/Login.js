@@ -1,24 +1,54 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button} from 'react-native';
 import {COLORS} from '../colors';
+import {init, loginCheck, addParent} from '../../database/db.js';
+
+init()
+.then(()=>{
+    console.log('Database creation succeeded!');
+}).catch((err)=>{
+  console.log('Database IS NOT initialized! '+err);
+});
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const checkLogin = () => {
-    if (username === 'test' && password === 'test') {
-      alert('Login successful');
-    } else {
-      alert('Wrong username or password');
+  async function checkLogin(){
+    try{
+      const dbResult = await loginCheck(username, password);
+      if (dbResult === "Ok"){
+        alert("Login ok!");
+      }
+
+      if (dbResult === "No ok"){
+        alert("Login not ok!");
+      }
+
+      else {
+        alert("Login no ac!");
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+    finally{
+      //No need to do anything
     }
   };
+
+  async function parent(){
+    try{
+      const dbResult = await addParent("test", "test");
+      console.log("dbResult: "+dbResult);//For debugging purposes to see the data in the console screen
+    }
+    catch(err){
+      console.log(err);
+    }
+    finally{
+      //No need to do anything
+    }
+  }
 
   return (
     <View style={styles.background}>
@@ -42,9 +72,10 @@ const Login = () => {
             marginTop: 10,
           }}>
           <Text style={styles.link}>Create an account</Text>
-          <TouchableOpacity style={styles.button} onPress={checkLogin}>
+          <TouchableOpacity style={styles.button} onPress={()=>checkLogin()}>
             <Text style={{color: COLORS.white, fontSize: 20}}>Login</Text>
           </TouchableOpacity>
+          <Button title="Save" onPress={()=>parent()} />
         </View>
       </View>
     </View>
