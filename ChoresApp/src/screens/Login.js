@@ -9,6 +9,7 @@ import {
 import {COLORS} from '../colors';
 
 const Login = () => {
+  const [accountType, setAccountType] = useState('child');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,6 +26,37 @@ const Login = () => {
       <View style={styles.container}>
         <Text style={styles.logo}>Chores</Text>
         <Text style={styles.heading}>Login</Text>
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            marginBottom: 10,
+          }}>
+          <Text style={[styles.text, {flex: 1}]}>I'm a</Text>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              {
+                marginRight: 10,
+                backgroundColor:
+                  accountType === 'child' ? '#268696' : COLORS.primary,
+              },
+            ]}
+            onPress={() => setAccountType('child')}>
+            <Text style={styles.buttonText}>child</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              {
+                backgroundColor:
+                  accountType === 'adult' ? '#268696' : COLORS.primary,
+              },
+            ]}
+            onPress={() => setAccountType('adult')}>
+            <Text style={styles.buttonText}>adult</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.text}>Username:</Text>
         <TextInput
           style={styles.input}
@@ -43,7 +75,7 @@ const Login = () => {
           }}>
           <Text style={styles.link}>Create an account</Text>
           <TouchableOpacity style={styles.button} onPress={checkLogin}>
-            <Text style={{color: COLORS.white, fontSize: 20}}>Login</Text>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -62,6 +94,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     borderRadius: 5,
     padding: 7,
+  },
+  buttonText: {
+    alignSelf: 'center',
+    color: COLORS.white,
+    fontSize: 20,
   },
   container: {
     alignItems: 'center',
