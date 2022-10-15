@@ -12,13 +12,13 @@ const AppButton = ({children, onPress, style}) => {
 
 const styles = StyleSheet.create({
   button: {
+    alignItems: 'center',
     backgroundColor: COLORS.primary,
     borderRadius: 5,
-    padding: 7,
+    justifyContent: 'center',
+    padding: 8,
   },
   buttonText: {
-    alignSelf: 'center',
-    color: COLORS.white,
     fontSize: 20,
   },
 });

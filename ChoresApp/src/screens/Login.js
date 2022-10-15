@@ -7,6 +7,7 @@ import AppText from '../components/AppText';
 import Heading from '../components/Heading';
 import MainContainer from '../components/MainContainer';
 import Input from '../components/Input';
+import Container from '../components/Container';
 
 init()
   .then(() => {
@@ -52,8 +53,8 @@ const Login = () => {
   }
 
   return (
-    <MainContainer>
-      <View style={styles.container}>
+    <MainContainer style={{justifyContent: 'center'}}>
+      <Container>
         <Text style={styles.logo}>Chores</Text>
         <Heading>Login</Heading>
         <View style={styles.accountTypeContainer}>
@@ -88,7 +89,7 @@ const Login = () => {
           <AppButton onPress={() => checkLogin()}>Login</AppButton>
           <Button title="Save" onPress={() => parent()} />
         </View>
-      </View>
+      </Container>
     </MainContainer>
   );
 };
@@ -98,12 +99,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginBottom: 10,
-  },
-  container: {
-    alignItems: 'center',
-    height: 200,
-    justifyContent: 'center',
-    width: '70%',
   },
   logo: {
     fontFamily: 'fuzzybubbles',
@@ -119,6 +114,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+    marginBottom: 25,
   },
 });
 
