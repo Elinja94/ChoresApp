@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {COLORS} from '../colors';
 
-const MainContainer = ({children}) => {
-  return <View style={styles.background}>{children}</View>;
+const MainContainer = ({children, style}) => {
+  return <View style={[styles.background, style]}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.background,
     height: '100%',
-    justifyContent: 'center',
   },
 });
 
