@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import {COLORS} from '../colors';
 import {init, loginCheck, addParent} from '../../database/db.js';
-import MainContainer from '../components/MainContainer';
 import AppButton from '../components/AppButton';
-import Heading from '../components/Heading';
-import Input from '../components/Input';
 import AppText from '../components/AppText';
+import Heading from '../components/Heading';
+import MainContainer from '../components/MainContainer';
+import Input from '../components/Input';
 
 init()
   .then(() => {
@@ -56,19 +56,14 @@ const Login = () => {
       <View style={styles.container}>
         <Text style={styles.logo}>Chores</Text>
         <Heading>Login</Heading>
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            marginBottom: 10,
-          }}>
+        <View style={styles.accountTypeContainer}>
           <AppText style={{flex: 1}}>I'm a</AppText>
           <AppButton
             onPress={() => setAccountType('child')}
             style={{
               marginRight: 10,
               backgroundColor:
-                accountType === 'child' ? '#268696' : COLORS.primary,
+                accountType === 'child' ? COLORS.darkBlue : COLORS.primary,
             }}>
             child
           </AppButton>
@@ -76,26 +71,20 @@ const Login = () => {
             onPress={() => setAccountType('adult')}
             style={{
               backgroundColor:
-                accountType === 'adult' ? '#268696' : COLORS.primary,
+                accountType === 'adult' ? COLORS.darkBlue : COLORS.primary,
             }}>
             adult
           </AppButton>
         </View>
-        <AppText>Username</AppText>
+        <AppText>Username:</AppText>
         <Input onChangeText={text => setUsername(text)} />
-        <AppText>Password</AppText>
+        <AppText>Password:</AppText>
         <Input
           secureTextEntry={true}
           onChangeText={text => setPassword(text)}
         />
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 10,
-          }}>
-          <Text style={styles.link}>Create an account</Text>
+        <View style={styles.submitButtonContainer}>
+          <AppText style={styles.link}>Create an account</AppText>
           <AppButton onPress={() => checkLogin()}>Login</AppButton>
           <Button title="Save" onPress={() => parent()} />
         </View>
@@ -105,6 +94,11 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
+  accountTypeContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
   container: {
     alignItems: 'center',
     height: 200,
@@ -119,8 +113,12 @@ const styles = StyleSheet.create({
   link: {
     color: 'red',
     flex: 2,
-    fontSize: 18,
-    marginLeft: 6,
+  },
+  submitButtonContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
 });
 
