@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
+import BottomBar from '../components/BottomBar';
 import Container from '../components/Container';
 import Input from '../components/Input';
 import MainContainer from '../components/MainContainer';
@@ -24,6 +25,7 @@ const ChildForm = () => {
         />
         <AppButton style={{alignSelf: 'flex-end', marginTop: 5}}>Add</AppButton>
       </Container>
+      <BottomBar />
     </MainContainer>
   );
 };
