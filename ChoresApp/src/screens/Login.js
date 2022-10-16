@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import {COLORS} from '../colors';
-import {init, loginCheck, addParent} from '../../database/db.js';
+import {init, loginCheck, all} from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
 import Heading from '../components/Heading';
@@ -43,7 +43,7 @@ const Login = () => {
 
   async function parent() {
     try {
-      const dbResult = await addParent('test', 'test');
+      const dbResult = await all();
       console.log('dbResult: ' + dbResult); //For debugging purposes to see the data in the console screen
     } catch (err) {
       console.log(err);
