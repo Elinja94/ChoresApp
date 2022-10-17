@@ -1,11 +1,11 @@
+// Sonja and Jenna
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {StyleSheet, View, Text, Pressable} from 'react-native';
 import {COLORS} from '../colors';
 import {
   init,
   loginCheckParent,
   loginCheckChild,
-  all,
   getParentUser,
 } from '../../database/db.js';
 import AppButton from '../components/AppButton';
@@ -43,9 +43,9 @@ const Login = props => {
         alert('Login ok!');
         props.navigation.navigate('ChildForm');
       } else if (dbResult === 'No ok') {
-        alert('Login not ok!');
+        alert('Username or password is incorrect');
       } else {
-        alert('Login no ac!');
+        alert('No username '+username);
       }
     } catch (err) {
       console.log(err);
@@ -54,16 +54,7 @@ const Login = props => {
     }
   }
 
-  async function parent() {
-    try {
-      const dbResult = await all();
-      console.log('dbResult: ' + dbResult); //For debugging purposes to see the data in the console screen
-    } catch (err) {
-      console.log(err);
-    } finally {
-      //No need to do anything
-    }
-  }
+  const register = () => props.navigation.navigate("Register");
 
   return (
     <MainContainer style={{justifyContent: 'center'}}>
@@ -98,9 +89,10 @@ const Login = props => {
           onChangeText={text => setPassword(text)}
         />
         <View style={styles.submitButtonContainer}>
-          <AppText style={styles.link}>Create an account</AppText>
+          <Pressable style={styles.link} onPress={register}>
+            <AppText style={styles.link}>Create an account</AppText>
+          </Pressable>
           <AppButton onPress={() => checkLogin()}>Login</AppButton>
-          <Button title="Save" onPress={() => parent()} />
         </View>
       </Container>
     </MainContainer>

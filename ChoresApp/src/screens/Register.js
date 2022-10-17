@@ -17,12 +17,7 @@ init()
     console.log('Database IS NOT initialized! ' + err);
   });
 
-// Navigation setted to use later
-interface RegisterScreenProps {
-navigation: any;
-}
-
-const Register = (props: RegisterScreenProps) => {
+const Register = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
