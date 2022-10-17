@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {addChild} from '../../database/db.js';
+import {UserContext} from '../../App.js';
+import {
+  addChild,
+  addChildParentConnection,
+  getChildId,
+} from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
 import BottomBar from '../components/BottomBar';
@@ -12,11 +17,15 @@ import Navigation from '../components/Navigation';
 const ChildForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const user = React.useContext(UserContext);
 
   async function child() {
     try {
       const dbResult = await addChild(username, password);
-      console.log('dbResult: ' + dbResult); //For debugging purposes to see the data in the console screen
+      console.log('dbResult: ' + dbResult);
+      const {childID} = await getChildId(username);
+      const parentID = user.parentID;
+      await addChildParentConnection(childID, parentID);
     } catch (err) {
       console.log(err);
     } finally {

@@ -107,10 +107,22 @@ export const init = () => {
       // Adding data to chores table
       tx.executeSql(
         'INSERT INTO ' +
-          choresTable + 
+          choresTable +
           ' (choreInfo) VALUES (?),(?),(?),(?),(?),(?),(?),(?),(?),(?),(?);',
         // Here would be all the values
-        ['Clean kitchen', 'Clean livingroom', 'Clean bathroom', 'Clean your room', 'Clean backyard', 'Vacuum the whole house', 'Do dishes', 'Fill dishwasher', 'Empty dishwasher', 'Hang clothes', 'Take the thrash out'],
+        [
+          'Clean kitchen',
+          'Clean livingroom',
+          'Clean bathroom',
+          'Clean your room',
+          'Clean backyard',
+          'Vacuum the whole house',
+          'Do dishes',
+          'Fill dishwasher',
+          'Empty dishwasher',
+          'Hang clothes',
+          'Take the thrash out',
+        ],
         // If the transaction succeeds, this is called
         () => {
           resolve();
@@ -301,6 +313,92 @@ export const addChild = (cUser, cPass, cMoney) => {
           },
         );
       });
+    });
+  });
+  return promise;
+};
+
+export const getParentUser = user => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Selecting only parentID with given name
+      tx.executeSql(
+        'SELECT parentID, parentUsername, parentMoney FROM ' +
+          parentTable +
+          ' WHERE parentUsername = "' +
+          user +
+          '"',
+        [],
+        (tx, result) => {
+          // Making sure there is user with given name
+          var len = result.rows.length;
+          if (len > 0) {
+            let row = result.rows.item(0);
+            resolve(row);
+          }
+          // If there is no account with given name
+          resolve('No ac');
+        },
+        (tx, err) => {
+          console.log('Err');
+          console.log(err);
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+export const addChildParentConnection = (childID, parentID) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Prepared statement with placeolders
+      tx.executeSql(
+        'insert into ' + childParentTable + ' (child, parent) values(?,?);',
+        // Values for the placeholders
+        [childID, parentID],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+export const getChildId = user => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Selecting only childID with given name
+      tx.executeSql(
+        'SELECT childID FROM ' +
+          childTable +
+          ' WHERE childUsername = "' +
+          user +
+          '"',
+        [],
+        (tx, result) => {
+          // Making sure there is user with given name
+          var len = result.rows.length;
+          if (len > 0) {
+            let row = result.rows.item(0);
+            resolve(row);
+          }
+          // If there is no account with given name
+          resolve('No ac');
+        },
+        (tx, err) => {
+          console.log('Err');
+          console.log(err);
+          reject(err);
+        },
+      );
     });
   });
   return promise;
