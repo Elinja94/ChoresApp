@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import {COLORS} from '../colors';
-import {init, loginCheckParent, loginCheckChild, all} from '../../database/db.js';
+import {
+  init,
+  loginCheckParent,
+  loginCheckChild,
+  all,
+} from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
 import Heading from '../components/Heading';
@@ -17,7 +22,7 @@ init()
     console.log('Database IS NOT initialized! ' + err);
   });
 
-const Login = () => {
+const Login = props => {
   const [accountType, setAccountType] = useState('child');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,23 +30,18 @@ const Login = () => {
   async function checkLogin() {
     try {
       let dbResult = null;
-      if (accountType === 'parent'){
+      if (accountType === 'parent') {
         dbResult = await loginCheckParent(username, password);
-      }
-
-      else {
+      } else {
         dbResult = await loginCheckChild(username, password);
       }
-      
+
       if (dbResult === 'Ok') {
         alert('Login ok!');
-      }
-
-      else if (dbResult === 'No ok') {
+        props.navigation.navigate('ChildForm');
+      } else if (dbResult === 'No ok') {
         alert('Login not ok!');
-      } 
-
-      else {
+      } else {
         alert('Login no ac!');
       }
     } catch (err) {
