@@ -1,5 +1,6 @@
+// Sonja and Jenna
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {StyleSheet, View, Text, Pressable} from 'react-native';
 import {COLORS} from '../colors';
 import {init, loginCheckParent, loginCheckChild, all} from '../../database/db.js';
 import AppButton from '../components/AppButton';
@@ -9,6 +10,7 @@ import MainContainer from '../components/MainContainer';
 import Input from '../components/Input';
 import Container from '../components/Container';
 
+// Getting connection to database and creating it
 init()
   .then(() => {
     console.log('Database creation succeeded!');
@@ -17,50 +19,47 @@ init()
     console.log('Database IS NOT initialized! ' + err);
   });
 
-const Login = () => {
+// Navigation setted to use later
+interface LoginScreenProps {
+  navigation: any;
+}
+
+const Login = (props: LoginScreenProps) => {
   const [accountType, setAccountType] = useState('child');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Checking the login information Sonja
   async function checkLogin() {
     try {
       let dbResult = null;
+      // If parent is selected
       if (accountType === 'parent'){
         dbResult = await loginCheckParent(username, password);
       }
-
+      // If child is selected
       else {
         dbResult = await loginCheckChild(username, password);
       }
-      
+      // If everything was correct moves on
       if (dbResult === 'Ok') {
         alert('Login ok!');
       }
-
+      // If password was incorrect
       else if (dbResult === 'No ok') {
-        alert('Login not ok!');
+        alert('Username or password is incorrect');
       } 
-
+      // If there is no account by that username
       else {
-        alert('Login no ac!');
+        alert('No username '+username);
       }
     } catch (err) {
       console.log(err);
     } finally {
-      //No need to do anything
     }
   }
 
-  async function parent() {
-    try {
-      const dbResult = await all();
-      console.log('dbResult: ' + dbResult); //For debugging purposes to see the data in the console screen
-    } catch (err) {
-      console.log(err);
-    } finally {
-      //No need to do anything
-    }
-  }
+  const register = () => props.navigation.navigate("Register");
 
   return (
     <MainContainer style={{justifyContent: 'center'}}>
@@ -95,9 +94,10 @@ const Login = () => {
           onChangeText={text => setPassword(text)}
         />
         <View style={styles.submitButtonContainer}>
-          <AppText style={styles.link}>Create an account</AppText>
+          <Pressable style={styles.link} onPress={register}>
+            <AppText style={styles.link}>Create an account</AppText>
+          </Pressable>
           <AppButton onPress={() => checkLogin()}>Login</AppButton>
-          <Button title="Save" onPress={() => parent()} />
         </View>
       </Container>
     </MainContainer>
