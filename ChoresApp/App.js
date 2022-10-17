@@ -1,21 +1,28 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useState} from 'react';
 import ChildForm from './src/screens/ChildForm';
 import Login from './src/screens/Login';
 
 const Stack = createNativeStackNavigator();
+export const UserContext = React.createContext();
 
 const App = () => {
+  const [user, setUser] = useState('Reed');
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="ChildForm" component={ChildForm} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserContext.Provider value={user}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Login">
+            {props => <Login {...props} setUser={setUser} />}
+          </Stack.Screen>
+          <Stack.Screen name="ChildForm" component={ChildForm} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserContext.Provider>
   );
 };
 

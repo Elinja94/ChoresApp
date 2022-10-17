@@ -6,6 +6,7 @@ import {
   loginCheckParent,
   loginCheckChild,
   all,
+  getParentUser,
 } from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -38,6 +39,8 @@ const Login = props => {
 
       if (dbResult === 'Ok') {
         alert('Login ok!');
+        const user = await getParentUser(username);
+        props.setUser(user);
         props.navigation.navigate('ChildForm');
       } else if (dbResult === 'No ok') {
         alert('Login not ok!');

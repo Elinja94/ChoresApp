@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
+import {UserContext} from '../../App.js';
 import {addChild} from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -12,6 +13,7 @@ import Navigation from '../components/Navigation';
 const ChildForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const user = React.useContext(UserContext);
 
   async function child() {
     try {
@@ -26,6 +28,7 @@ const ChildForm = () => {
 
   return (
     <MainContainer>
+      {console.log('user:', user)}
       <Navigation title="Add child" />
       <Container>
         <AppText>Username:</AppText>
