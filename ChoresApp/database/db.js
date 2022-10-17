@@ -1,4 +1,4 @@
-//Sonja, but some of them are modified from teacher's code
+//Sonja and Jenna, but some of them are modified from teacher's code
 import React from 'react';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {sha256} from 'react-native-sha256';
@@ -11,7 +11,7 @@ var choresTable = 'chores';
 var childParentTable = 'childparent';
 var childChoreTable = 'childchore';
 var hashed = '';
-// Creating tables to the database
+// Creating tables to the database and adding data to chores table by Sonja
 export const init = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -21,7 +21,7 @@ export const init = () => {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS ' +
           parentTable +
-          '(parentID INTEGER NOT NULL PRIMARY KEY, parentUsername VARCHAR(30) NOT NULL, parentPassword varchar(200) NOT NULL, parentMoney REAL);',
+          '(parentID INTEGER NOT NULL PRIMARY KEY, parentUsername VARCHAR(30) NOT NULL UNIQUE, parentPassword varchar(200) NOT NULL, parentMoney REAL);',
         // Here would be all the values
         [],
         // If the transaction succeeds, this is called
@@ -38,7 +38,7 @@ export const init = () => {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS ' +
           childTable +
-          '(childID INTEGER NOT NULL PRIMARY KEY, childUsername VARCHAR(30) NOT NULL, childPassword varchar(200) NOT NULL, childMoney REAL);',
+          '(childID INTEGER NOT NULL PRIMARY KEY, childUsername VARCHAR(30) NOT NULL UNIQUE, childPassword varchar(200) NOT NULL, childMoney REAL);',
         // Here would be all the values
         [],
         // If the transaction succeeds, this is called
@@ -51,6 +51,8 @@ export const init = () => {
         },
       );
 
+      // Removing chores table
+      tx.executeSql('DROP TABLE IF EXISTS chores', []);
       // Chores table
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS ' +
@@ -101,12 +103,30 @@ export const init = () => {
           reject(err);
         },
       );
+
+      // Adding data to chores table
+      tx.executeSql(
+        'INSERT INTO ' +
+          choresTable + 
+          ' (choreInfo) VALUES (?),(?),(?),(?),(?),(?),(?),(?),(?),(?),(?);',
+        // Here would be all the values
+        ['Clean kitchen', 'Clean livingroom', 'Clean bathroom', 'Clean your room', 'Clean backyard', 'Vacuum the whole house', 'Do dishes', 'Fill dishwasher', 'Empty dishwasher', 'Hang clothes', 'Take the thrash out'],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
     });
   });
   return promise;
 };
 
-export const loginCheck = (user, pass) => {
+// Checking the login information for parent by Sonja
+export const loginCheckParent = (user, pass) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       // Making password more secure, not plain text
@@ -148,6 +168,50 @@ export const loginCheck = (user, pass) => {
   return promise;
 };
 
+// Checking the login information for child by Sonja
+export const loginCheckChild = (user, pass) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Making password more secure, not plain text
+      sha256(pass).then(hash => {
+        hashed = hash;
+        // Selecting only password with given name
+        tx.executeSql(
+          'SELECT childPassword FROM ' +
+            childTable +
+            ' WHERE childUsername = "' +
+            user +
+            '"',
+          [],
+          (tx, result) => {
+            // Making sure there is user with given name
+            var len = result.rows.length;
+            if (len > 0) {
+              // Setting row so we can check later if passwords match
+              let row = result.rows.item(0);
+              if (hashed === row.childPassword) {
+                // If password matches
+                resolve('Ok');
+              }
+              // If password doesn't match
+              resolve('No ok');
+            }
+            // If there is no account with given name
+            resolve('No ac');
+          },
+          (tx, err) => {
+            console.log('Err');
+            console.log(err);
+            reject(err);
+          },
+        );
+      });
+    });
+  });
+  return promise;
+};
+
+// Parent registration for parents by Sonja
 export const addParent = (pUser, pPass, pMoney) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -204,12 +268,13 @@ export const addChild = (cUser, cPass, cMoney) => {
   return promise;
 };
 
+// Only for testing
 export const all = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + parentTable,
+        'select * from ' + childTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
@@ -218,7 +283,6 @@ export const all = () => {
             items.push(result.rows.item(i)); //The form of an item is {"breed": "Pike", "id": 1, "weight": 5000}
             console.log(result.rows.item(i)); //For debugging purposes to see the data in console window
           }
-          console.log(items); //For debugging purposes to see the data in console window
           resolve(items); //The data the Promise will have when returned
         },
         (tx, err) => {

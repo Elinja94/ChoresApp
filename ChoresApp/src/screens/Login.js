@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import {COLORS} from '../colors';
-import {init, loginCheck, addParent} from '../../database/db.js';
+import {init, loginCheckParent, loginCheckChild, all} from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
 import Heading from '../components/Heading';
@@ -24,14 +24,24 @@ const Login = () => {
 
   async function checkLogin() {
     try {
-      const dbResult = await loginCheck(username, password);
+      let dbResult = null;
+      if (accountType === 'parent'){
+        dbResult = await loginCheckParent(username, password);
+      }
+
+      else {
+        dbResult = await loginCheckChild(username, password);
+      }
+      
       if (dbResult === 'Ok') {
         alert('Login ok!');
       }
 
-      if (dbResult === 'No ok') {
+      else if (dbResult === 'No ok') {
         alert('Login not ok!');
-      } else {
+      } 
+
+      else {
         alert('Login no ac!');
       }
     } catch (err) {
@@ -43,7 +53,7 @@ const Login = () => {
 
   async function parent() {
     try {
-      const dbResult = await addParent('test', 'test');
+      const dbResult = await all();
       console.log('dbResult: ' + dbResult); //For debugging purposes to see the data in the console screen
     } catch (err) {
       console.log(err);
@@ -69,10 +79,10 @@ const Login = () => {
             child
           </AppButton>
           <AppButton
-            onPress={() => setAccountType('adult')}
+            onPress={() => setAccountType('parent')}
             style={{
               backgroundColor:
-                accountType === 'adult' ? COLORS.darkBlue : COLORS.primary,
+                accountType === 'parent' ? COLORS.darkBlue : COLORS.primary,
             }}>
             adult
           </AppButton>
