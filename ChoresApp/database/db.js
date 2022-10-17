@@ -312,6 +312,60 @@ export const getParentUser = user => {
   return promise;
 };
 
+export const addChildParentConnection = (childID, parentID) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Prepared statement with placeolders
+      tx.executeSql(
+        'insert into ' + childParentTable + ' (child, parent) values(?,?);',
+        // Values for the placeholders
+        [childID, parentID],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+export const getChildId = user => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Selecting only childID with given name
+      tx.executeSql(
+        'SELECT childID FROM ' +
+          childTable +
+          ' WHERE childUsername = "' +
+          user +
+          '"',
+        [],
+        (tx, result) => {
+          // Making sure there is user with given name
+          var len = result.rows.length;
+          if (len > 0) {
+            let row = result.rows.item(0);
+            resolve(row);
+          }
+          // If there is no account with given name
+          resolve('No ac');
+        },
+        (tx, err) => {
+          console.log('Err');
+          console.log(err);
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 // Only for testing
 export const all = () => {
   const promise = new Promise((resolve, reject) => {
