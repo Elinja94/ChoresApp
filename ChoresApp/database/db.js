@@ -229,12 +229,10 @@ export const addParent = (pUser, pPass) => {
     db.transaction(tx => {
       // Checking for empty fields
       if (pPass.length === 0) {
-        console.log("Gere");
         resolve('Empty');
         return promise;
       }
       if (pUser.length === 0) {
-        console.log("Gere");
         resolve('Empty');
         return promise;
       }
@@ -252,7 +250,6 @@ export const addParent = (pUser, pPass) => {
             [],
             (tx, result) => {
               var len = result.rows.length;
-              console.log(len);
               // If username is free
               if (len === 0) {
                 // Prepared statement with placeolders
@@ -410,7 +407,7 @@ export const all = () => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + parentTable,
+        'select * from ' + childTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
