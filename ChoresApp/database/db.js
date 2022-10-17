@@ -223,30 +223,68 @@ export const loginCheckChild = (user, pass) => {
   return promise;
 };
 
-// Parent registration for parents by Sonja
-export const addParent = (pUser, pPass, pMoney) => {
+// Parent registration by Sonja
+export const addParent = (pUser, pPass) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Making password more secure, not plain text
-      sha256(pPass).then(hash => {
-        hashed = hash;
-        // Prepared statement with placeolders
-        tx.executeSql(
-          'insert into ' +
-            parentTable +
-            ' (parentUsername, parentPassword, parentMoney) values(?,?,?);',
-          // Values for the placeholders
-          [pUser, hashed, pMoney],
-          // If the transaction succeeds, this is called
-          () => {
-            resolve();
-          },
-          // If the transaction fails, this is called
-          (_, err) => {
-            reject(err);
-          },
-        );
-      });
+      // Checking for empty fields
+      if (pPass.length === 0) {
+        console.log("Gere");
+        resolve('Empty');
+        return promise;
+      }
+      if (pUser.length === 0) {
+        console.log("Gere");
+        resolve('Empty');
+        return promise;
+      }
+       else {
+        // Making password more secure, not plain text
+        sha256(pPass).then(hash => {
+          hashed = hash;
+          // Checking if username is used
+          tx.executeSql(
+            'SELECT * FROM ' +
+              parentTable +
+              ' WHERE parentUsername = "' +
+              pUser +
+              '"',
+            [],
+            (tx, result) => {
+              var len = result.rows.length;
+              console.log(len);
+              // If username is free
+              if (len === 0) {
+                // Prepared statement with placeolders
+                tx.executeSql(
+                  'insert into ' +
+                    parentTable +
+                    ' (parentUsername, parentPassword, parentMoney) values(?,?,?);',
+                  // Values for the placeholders
+                  [pUser, hashed, 0],
+                  // If the transaction succeeds, this is called
+                  () => {
+                    resolve('Ok');
+                    return promise;
+                  },
+                  // If the transaction fails, this is called
+                  (_, err) => {
+                    reject(err);
+                  },
+                );
+              }
+              // If username is taken
+              else {
+                resolve('Already');
+              }
+            },
+            (tx, err) => {
+              console.log('Err');
+              console.log(err);
+              reject(err);
+            });
+        });
+      } 
     });
   });
   return promise;
@@ -372,7 +410,7 @@ export const all = () => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + childTable,
+        'select * from ' + parentTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
