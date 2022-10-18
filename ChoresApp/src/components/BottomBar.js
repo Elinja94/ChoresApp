@@ -4,11 +4,11 @@ import {COLORS} from '../colors';
 import AppButton from './AppButton';
 import AppText from './AppText';
 
-const BottomBar = () => {
+const BottomBar = ({text}) => {
   return (
     <View style={styles.bar}>
       <AppText style={styles.money}>Money: 0.00€</AppText>
-      <AppButton style={styles.account}>Parent</AppButton>
+      <AppButton style={styles.account}>{text}</AppButton>
     </View>
   );
 };

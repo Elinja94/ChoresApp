@@ -3,10 +3,12 @@ import {StyleSheet, View} from 'react-native';
 import AppButton from './AppButton';
 import Heading from './Heading';
 
-const Navigation = ({title}) => {
+const Navigation = ({navigation, title}) => {
   return (
     <View style={styles.navigation}>
-      <AppButton style={styles.button}>◀</AppButton>
+      <AppButton style={styles.button} onPress={() => navigation.goBack()}>
+        ◀
+      </AppButton>
       <Heading style={styles.heading}>{title}</Heading>
     </View>
   );

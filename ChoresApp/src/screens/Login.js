@@ -33,15 +33,18 @@ const Login = props => {
       let dbResult = null;
       if (accountType === 'parent') {
         dbResult = await loginCheckParent(username, password);
-        const user = await getParentUser(username);
-        props.setUser(user);
       } else {
         dbResult = await loginCheckChild(username, password);
       }
 
       if (dbResult === 'Ok') {
         alert('Login ok!');
-        props.navigation.navigate('ChildForm');
+
+        if (accountType === 'parent') {
+          const user = await getParentUser(username);
+          props.setUser(user);
+          props.navigation.navigate('AccountSettings');
+        }
       } else if (dbResult === 'No ok') {
         alert('Username or password is incorrect');
       } else {
