@@ -2,8 +2,13 @@ import React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
 import {COLORS} from '../colors';
 
-const Input = props => {
-  return <TextInput style={styles.input} {...props}></TextInput>;
+const Input = ({style, onChangeText, secureTextEntry}) => {
+  return (
+    <TextInput
+      style={[styles.input, style]}
+      onChangeText={onChangeText}
+      secureTextEntry={secureTextEntry}></TextInput>
+  );
 };
 
 const styles = StyleSheet.create({
