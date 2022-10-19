@@ -10,12 +10,14 @@ import ParentHomeScreen from './src/screens/ParentHomeScreen';
 import AddMoney from './src/screens/AddMoney';
 import AddChore from './src/screens/AddChore';
 
+// These are needed for the navigation system
 const Stack = createNativeStackNavigator();
 export const UserContext = React.createContext();
 
 const App = () => {
+  // To set username, so information can be used when logged in
   const [user, setUser] = useState('Reed');
-
+  // The navigation system, no header and login to be default screen
   return (
     <UserContext.Provider value={user}>
       <NavigationContainer>

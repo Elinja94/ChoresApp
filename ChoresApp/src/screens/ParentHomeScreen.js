@@ -1,3 +1,4 @@
+// Made by Sonja
 import React from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../colors';
@@ -13,22 +14,23 @@ import MainContainer from '../components/MainContainer';
 const ParentHomeScreen = props => {
     const user = React.useContext(UserContext);
 
-  return (
-    <MainContainer>
-        <View style={styles.container}>
-            <Heading style={styles.heading}>Chores List</Heading>
-            <AppButton style={styles.button} onPress={() => props.navigation.navigate("AddChore")}>
-                +
-            </AppButton>
-        </View>
-        <Container style={{width: '80%'}}>
-            
-        </Container>
-        <BottomBar text={user.parentUsername} navigation={props.navigation}/>
-    </MainContainer>
-  );
-};
+    // The visual part
+    return (
+        <MainContainer>
+            <View style={styles.container}>
+                <Heading style={styles.heading}>Chores List</Heading>
+                <AppButton style={styles.button} onPress={() => props.navigation.navigate("AddChore")}>
+                    +
+                </AppButton>
+                </View>
+            <Container style={{width: '80%'}}>
 
+            </Container>
+            <BottomBar text={user.parentUsername} navigation={props.navigation}/>
+        </MainContainer>
+    );
+};
+// Style
 const styles = StyleSheet.create({
     button: {
         height: 40,
