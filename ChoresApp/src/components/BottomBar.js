@@ -14,7 +14,11 @@ const BottomBar = ({navigation, text}) => {
       </Pressable>
       <AppButton
         style={styles.account}
-        onPress={() => navigation.navigate('AccountSettings')}>
+        onPress={
+          text !== 'Log out'
+            ? () => navigation.navigate('AccountSettings')
+            : () => navigation.navigate('Login')
+        }>
         {text}
       </AppButton>
     </View>
