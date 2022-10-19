@@ -43,7 +43,7 @@ const Login = props => {
         if (accountType === 'parent') {
           const user = await getParentUser(username);
           props.setUser(user);
-          props.navigation.navigate('AccountSettings');
+          props.navigation.navigate('ParentHomeScreen');
         }
       } else if (dbResult === 'No ok') {
         alert('Username or password is incorrect');

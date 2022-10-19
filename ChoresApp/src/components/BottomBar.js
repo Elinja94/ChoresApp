@@ -1,13 +1,15 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {COLORS} from '../colors';
 import AppButton from './AppButton';
 import AppText from './AppText';
 
-const BottomBar = ({text}) => {
+const BottomBar = ({navigation, text}) => {
   return (
     <View style={styles.bar}>
-      <AppText style={styles.money}>Money: 0.00€</AppText>
+      <Pressable style={styles.money} onPress={() => navigation.navigate("AddMoney")}>
+        <AppText>Money: 0.00€</AppText>
+      </Pressable>
       <AppButton style={styles.account}>{text}</AppButton>
     </View>
   );
