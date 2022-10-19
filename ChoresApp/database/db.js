@@ -253,9 +253,9 @@ export const addParent = (pUser, pPass) => {
               if (len === 0) {
                 // Prepared statement with placeolders
                 tx.executeSql(
-                  'insert into ' +
+                  'INSERT INTO ' +
                     parentTable +
-                    ' (parentUsername, parentPassword, parentMoney) values(?,?,?);',
+                    ' (parentUsername, parentPassword, parentMoney) VALUES (?,?,?);',
                   // Values for the placeholders
                   [pUser, hashed, 0],
                   // If the transaction succeeds, this is called
@@ -454,13 +454,37 @@ export const getAllChildrenForParent = parentID => {
   return promise;
 };
 
+// Parents adding money to their account
+export const updateMoney = (parentID, pMoney) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Updating money for parent who is logged in 
+      tx.executeSql(
+        'UPDATE ' +
+          parentTable +
+          ' SET parentMoney = '+ pMoney +' WHERE parentId =' + parentID +';',
+        [],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+        );
+    });
+  });
+  return promise;
+};
+
 // Only for testing
 export const all = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + childTable,
+        'select * from ' + parentTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array

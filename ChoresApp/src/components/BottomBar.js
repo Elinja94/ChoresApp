@@ -4,11 +4,11 @@ import {COLORS} from '../colors';
 import AppButton from './AppButton';
 import AppText from './AppText';
 
-const BottomBar = ({navigation, text}) => {
+const BottomBar = ({navigation, text, money}) => {
   return (
     <View style={styles.bar}>
-      <Pressable style={styles.money} onPress={() => navigation.navigate("AddMoney")}>
-        <AppText>Money: 0.00€</AppText>
+      <Pressable style={styles.money} onPress={() => navigation.navigate("MoneyForm")}>
+        <AppText>Money: {money} €</AppText>
       </Pressable>
       <AppButton style={styles.account}>{text}</AppButton>
     </View>
