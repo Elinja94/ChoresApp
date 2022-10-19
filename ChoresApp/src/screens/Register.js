@@ -9,6 +9,7 @@ import MainContainer from '../components/MainContainer';
 import Input from '../components/Input';
 import Container from '../components/Container';
 
+// To create and check connection to database
 init()
   .then(() => {
     console.log('Database creation succeeded!');
@@ -21,42 +22,29 @@ const Register = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Checking if registeration was a success
   async function registerCheck() {
     try {
       dbResult = await addParent(username, password);
-      
+      // If account was created
       if (dbResult === 'Ok') {
-        alert('Register ok!');
+        alert('Account created!');
         props.navigation.navigate("Login");
       }
-
+      // If both fields were not filled
       else if (dbResult === 'Empty') {
         alert('Please enter username and password');
       } 
-
+      // If username is already taken
       else {
         alert('Username is already used!');
       }
     } catch (err) {
       console.log(err);
     } finally {
-      //No need to do anything
     }
   }
-
-  async function parent() {
-    try {
-      const dbResult = await all();
-      console.log('dbResult: ' + dbResult); //For debugging purposes to see the data in the console screen
-    } catch (err) {
-      console.log(err);
-    } finally {
-      //No need to do anything
-    }
-  }
-
-  const login = () => props.navigation.navigate("Login");
-
+  // The visual part
   return (
     <MainContainer style={{justifyContent: 'center'}}>
         <Container>
@@ -70,17 +58,16 @@ const Register = props => {
             onChangeText={text => setPassword(text)}
             />
             <View style={styles.submitButtonContainer}>
-                <Pressable style={styles.link} onPress={login}>
+                <Pressable style={styles.link} onPress={() => props.navigation.navigate("Login")}>
                     <AppText style={styles.link}>Back to login</AppText>
                 </Pressable>
                 <AppButton onPress={() => registerCheck()}>Register</AppButton>
-                <AppButton title="Save" onPress={() => parent()} />
             </View>
         </Container>
     </MainContainer>
   );
 };
-
+// Styles
 const styles = StyleSheet.create({
   logo: {
     fontFamily: 'fuzzybubbles',

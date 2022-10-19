@@ -15,6 +15,7 @@ import MainContainer from '../components/MainContainer';
 import Input from '../components/Input';
 import Container from '../components/Container';
 
+// To create and check connection to database
 init()
   .then(() => {
     console.log('Database creation succeeded!');
@@ -28,37 +29,41 @@ const Login = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Checking the login mostly by Sonja
   async function checkLogin() {
     try {
       let dbResult = null;
+      // Checking if parent
       if (accountType === 'parent') {
         dbResult = await loginCheckParent(username, password);
-      } else {
+      } 
+      // Checking if chlid
+      else {
         dbResult = await loginCheckChild(username, password);
       }
-
+      // If login was a success
       if (dbResult === 'Ok') {
-        alert('Login ok!');
-
+        // Parent
         if (accountType === 'parent') {
           const user = await getParentUser(username);
           props.setUser(user);
-          props.navigation.navigate('AccountSettings');
+          props.navigation.navigate('ParentHomeScreen');
         }
-      } else if (dbResult === 'No ok') {
+      } 
+      // If infomration didn't match
+      else if (dbResult === 'No ok') {
         alert('Username or password is incorrect');
-      } else {
+      } 
+      // If username is not in database
+      else {
         alert('No username '+username);
       }
     } catch (err) {
       console.log(err);
     } finally {
-      //No need to do anything
     }
   }
-
-  const register = () => props.navigation.navigate("Register");
-
+  // The visual part
   return (
     <MainContainer style={{justifyContent: 'center'}}>
       <Container>
@@ -81,7 +86,7 @@ const Login = props => {
               backgroundColor:
                 accountType === 'parent' ? COLORS.darkBlue : COLORS.primary,
             }}>
-            adult
+            parent
           </AppButton>
         </View>
         <AppText>Username:</AppText>
@@ -92,7 +97,7 @@ const Login = props => {
           onChangeText={text => setPassword(text)}
         />
         <View style={styles.submitButtonContainer}>
-          <Pressable style={styles.link} onPress={register}>
+          <Pressable style={styles.link} onPress={() => props.navigation.navigate("Register")}>
             <AppText style={styles.link}>Create an account</AppText>
           </Pressable>
           <AppButton onPress={() => checkLogin()}>Login</AppButton>
@@ -101,7 +106,7 @@ const Login = props => {
     </MainContainer>
   );
 };
-
+// Style
 const styles = StyleSheet.create({
   accountTypeContainer: {
     alignItems: 'center',
