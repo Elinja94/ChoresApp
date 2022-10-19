@@ -1,5 +1,8 @@
-import React from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {UserContext} from '../../App';
+import {getAllChildrenForParent, getChild} from '../../database/db';
 import {COLORS} from '../colors';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -11,10 +14,32 @@ import MainContainer from '../components/MainContainer';
 import Navigation from '../components/Navigation';
 
 const AccountSettings = props => {
-  const children = [
-    {childID: 1, childUsername: 'child 1'},
-    {childID: 2, childUsername: 'child 2'},
-  ];
+  const user = React.useContext(UserContext);
+  const isFocused = useIsFocused();
+  const [children, setChildren] = useState([]);
+
+  async function getChildren() {
+    try {
+      const childIDs = await getAllChildrenForParent(user.parentID);
+      console.log('dbResult: ' + childIDs);
+      const childrenList = [];
+
+      for (id of childIDs) {
+        const child = await getChild(id);
+        childrenList.push(child);
+      }
+
+      setChildren(childrenList);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    if (isFocused) {
+      getChildren();
+    }
+  }, [isFocused]);
 
   return (
     <MainContainer>
@@ -33,13 +58,13 @@ const AccountSettings = props => {
         <Heading style={styles.heading}>Children list</Heading>
         <FlatList
           data={children}
+          keyExtractor={item => item.childID}
           renderItem={i => (
             <View style={styles.container}>
               <AppText style={styles.child}>{i.item.childUsername}</AppText>
               <AppButton style={styles.button}>Edit</AppButton>
             </View>
           )}
-          keyExtractor={item => item.childID}
           style={{width: '100%'}}></FlatList>
       </Container>
       <BottomBar text="Log out" />

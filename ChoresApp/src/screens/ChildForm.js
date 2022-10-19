@@ -26,6 +26,7 @@ const ChildForm = props => {
       const {childID} = await getChildId(username);
       const parentID = user.parentID;
       await addChildParentConnection(childID, parentID);
+      props.navigation.navigate('AccountSettings');
     } catch (err) {
       console.log(err);
     } finally {
