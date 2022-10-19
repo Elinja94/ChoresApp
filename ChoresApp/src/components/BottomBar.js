@@ -7,10 +7,16 @@ import AppText from './AppText';
 const BottomBar = ({navigation, text}) => {
   return (
     <View style={styles.bar}>
-      <Pressable style={styles.money} onPress={() => navigation.navigate("AddMoney")}>
+      <Pressable
+        style={styles.money}
+        onPress={() => navigation.navigate('AddMoney')}>
         <AppText>Money: 0.00€</AppText>
       </Pressable>
-      <AppButton style={styles.account}>{text}</AppButton>
+      <AppButton
+        style={styles.account}
+        onPress={() => navigation.navigate('AccountSettings')}>
+        {text}
+      </AppButton>
     </View>
   );
 };
