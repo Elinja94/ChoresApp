@@ -235,8 +235,7 @@ export const addParent = (pUser, pPass) => {
       if (pUser.length === 0) {
         resolve('Empty');
         return promise;
-      }
-       else {
+      } else {
         // Making password more secure, not plain text
         sha256(pPass).then(hash => {
           hashed = hash;
@@ -279,9 +278,10 @@ export const addParent = (pUser, pPass) => {
               console.log('Err');
               console.log(err);
               reject(err);
-            });
+            },
+          );
         });
-      } 
+      }
     });
   });
   return promise;
@@ -393,6 +393,59 @@ export const getChildId = user => {
         (tx, err) => {
           console.log('Err');
           console.log(err);
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+export const getChild = childID => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT childID, childUsername FROM ' +
+          childTable +
+          ' WHERE childID = "' +
+          childID +
+          '"',
+        [],
+        (tx, result) => {
+          var len = result.rows.length;
+          if (len > 0) {
+            let row = result.rows.item(0);
+            resolve(row);
+          }
+          resolve('No ac');
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+export const getAllChildrenForParent = parentID => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'select child from ' +
+          childParentTable +
+          ' WHERE parent = "' +
+          parentID +
+          '"',
+        [],
+        (tx, result) => {
+          let childIDs = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            childIDs.push(result.rows.item(i).child);
+          }
+          resolve(childIDs);
+        },
+        (tx, err) => {
           reject(err);
         },
       );
