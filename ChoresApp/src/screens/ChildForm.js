@@ -14,7 +14,7 @@ import Input from '../components/Input';
 import MainContainer from '../components/MainContainer';
 import Navigation from '../components/Navigation';
 
-const ChildForm = () => {
+const ChildForm = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const user = React.useContext(UserContext);
@@ -35,7 +35,7 @@ const ChildForm = () => {
 
   return (
     <MainContainer>
-      <Navigation title="Add child" />
+      <Navigation title="Add child" navigation={props.navigation} />
       <Container>
         <AppText>Username:</AppText>
         <Input onChangeText={text => setUsername(text)} />
@@ -48,7 +48,7 @@ const ChildForm = () => {
           Add
         </AppButton>
       </Container>
-      <BottomBar />
+      <BottomBar text={user.parentUsername} />
     </MainContainer>
   );
 };

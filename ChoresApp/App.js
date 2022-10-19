@@ -2,6 +2,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
+import AccountSettings from './src/screens/AccountSettings';
 import ChildForm from './src/screens/ChildForm';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
@@ -20,6 +21,7 @@ const App = () => {
             {props => <Login {...props} setUser={setUser} />}
           </Stack.Screen>
           <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="AccountSettings" component={AccountSettings} />
           <Stack.Screen name="ChildForm" component={ChildForm} />
         </Stack.Navigator>
       </NavigationContainer>
