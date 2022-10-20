@@ -1,9 +1,12 @@
 // Made by Sonja
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useIsFocused} from '@react-navigation/native';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../colors';
 import {UserContext} from '../../App.js';
+import {getAllChildrenForParent, getChild} from '../../database/db';
 import AppButton from '../components/AppButton';
+import AppText from '../components/AppText';
 import BottomBar from '../components/BottomBar';
 import Container from '../components/Container';
 import Heading from '../components/Heading';
@@ -11,6 +14,34 @@ import MainContainer from '../components/MainContainer';
 
 const ParentHomeScreen = props => {
     const user = React.useContext(UserContext);
+    const isFocused = useIsFocused();
+    const [children, setChildren] = useState([]);
+    const [chores, setChore] = useState([]);
+    const [childChores, setChildChore] = useState([]);
+
+    async function getChildren() {
+        try {
+          const childIDs = await getAllChildrenForParent(user.parentID);
+          const childrenList = [];
+    
+          for (id of childIDs) {
+            const child = await getChild(id);
+            childrenList.push(child);
+          }
+    
+          setChildren(childrenList);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+
+    useEffect(() => {
+    if (isFocused) {
+        getChildren();
+        user;
+    }
+    }, [isFocused]);
 
     // The visual part
     return (
@@ -22,7 +53,16 @@ const ParentHomeScreen = props => {
                 </AppButton>
                 </View>
             <Container style={{width: '80%'}}>
-
+            <FlatList
+                data={children}
+                keyExtractor={item => item.childID}
+                renderItem={i => (
+                    <View>
+                        <Heading style={styles.heading}>{i.item.childUsername}</Heading>
+                        
+                    </View>
+                )}
+                style={{width: '100%'}}></FlatList>
             </Container>
             <BottomBar money={user.parentMoney} text={user.parentUsername} navigation={props.navigation}/>
         </MainContainer>
