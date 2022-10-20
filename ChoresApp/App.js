@@ -7,7 +7,7 @@ import ChildForm from './src/screens/ChildForm';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import ParentHomeScreen from './src/screens/ParentHomeScreen';
-import AddMoney from './src/screens/AddMoney';
+import MoneyForm from './src/screens/MoneyForm';
 import AddChore from './src/screens/AddChore';
 
 // These are needed for the navigation system
@@ -28,7 +28,7 @@ const App = () => {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="ParentHomeScreen" component={ParentHomeScreen} />
           <Stack.Screen name="AddChore" component={AddChore} />
-          <Stack.Screen name="AddMoney" component={AddMoney} />
+          <Stack.Screen name="MoneyForm" component={MoneyForm} />
           <Stack.Screen name="AccountSettings" component={AccountSettings} />
           <Stack.Screen name="ChildForm" component={ChildForm} />
         </Stack.Navigator>

@@ -4,11 +4,9 @@ import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../colors';
 import {UserContext} from '../../App.js';
 import AppButton from '../components/AppButton';
-import AppText from '../components/AppText';
 import BottomBar from '../components/BottomBar';
 import Container from '../components/Container';
 import Heading from '../components/Heading';
-import Input from '../components/Input';
 import MainContainer from '../components/MainContainer';
 
 const ParentHomeScreen = props => {
@@ -26,7 +24,7 @@ const ParentHomeScreen = props => {
             <Container style={{width: '80%'}}>
 
             </Container>
-            <BottomBar text={user.parentUsername} navigation={props.navigation}/>
+            <BottomBar money={user.parentMoney} text={user.parentUsername} navigation={props.navigation}/>
         </MainContainer>
     );
 };
