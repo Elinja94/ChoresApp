@@ -487,6 +487,7 @@ export const updateMoney = (parentID, pMoney) => {
   return promise;
 };
 
+// Get all chores by Jenna
 export const getAllChores = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -501,6 +502,29 @@ export const getAllChores = () => {
           resolve(chores);
         },
         (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+// Add chore by Jenna
+export const addChore = (childID, choreID) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Prepared statement with placeolders
+      tx.executeSql(
+        'insert into ' + childChoreTable + ' (child, chore, done) values(?,?, ?);',
+        // Values for the placeholders
+        [childID, choreID, false],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
           reject(err);
         },
       );

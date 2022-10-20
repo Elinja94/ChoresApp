@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {UserContext} from '../../App.js';
 import {
+  addChore,
   getAllChildrenForParent,
   getAllChores,
   getChild,
@@ -68,6 +69,24 @@ const AddChore = props => {
     getChildren();
   }, []);
 
+  async function saveChore() {
+    try {
+      if (!chore || !child) {
+        alert('Select a chore and a child');
+      } else {
+        const selectedChore = chores.find(c => c.choreInfo === chore);
+        const selectedChild = children.find(c => c.childUsername === child);
+        const dbResult = await addChore(
+          selectedChild.childID,
+          selectedChore.choreID,
+        );
+        console.log('dbResult: ', dbResult);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <MainContainer>
       <Navigation title="Add chore" navigation={props.navigation} />
@@ -92,7 +111,9 @@ const AddChore = props => {
           defaultValue="Select child"
           onSelect={index => setChild(childOptions[index])}
         />
-        <AppButton style={styles.button}>Add</AppButton>
+        <AppButton style={styles.button} onPress={saveChore}>
+          Add
+        </AppButton>
       </Container>
       <BottomBar text={user.parentUsername} navigation={props.navigation} />
     </MainContainer>
