@@ -287,6 +287,7 @@ export const addParent = (pUser, pPass) => {
   return promise;
 };
 
+// Child registration by Jenna
 export const addChild = (cUser, cPass, cMoney) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -315,15 +316,15 @@ export const addChild = (cUser, cPass, cMoney) => {
   return promise;
 };
 
-export const getParentUser = user => {
+// Get parent user by Jenna
+export const getParentUser = username => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Selecting only parentID with given name
       tx.executeSql(
         'SELECT parentID, parentUsername, parentMoney FROM ' +
           parentTable +
           ' WHERE parentUsername = "' +
-          user +
+          username +
           '"',
         [],
         (tx, result) => {
@@ -347,6 +348,7 @@ export const getParentUser = user => {
   return promise;
 };
 
+// Connect child to parent (when registering a child) by Jenna
 export const addChildParentConnection = (childID, parentID) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -369,15 +371,16 @@ export const addChildParentConnection = (childID, parentID) => {
   return promise;
 };
 
-export const getChildId = user => {
+// Get child ID by Jenna
+export const getChildID = username => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Selecting only childID with given name
+      // Selecting only childID with given username
       tx.executeSql(
         'SELECT childID FROM ' +
           childTable +
           ' WHERE childUsername = "' +
-          user +
+          username +
           '"',
         [],
         (tx, result) => {
@@ -401,6 +404,7 @@ export const getChildId = user => {
   return promise;
 };
 
+// Get child username by Jenna
 export const getChild = childID => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -428,6 +432,7 @@ export const getChild = childID => {
   return promise;
 };
 
+// Get all childrens ID's for parent by Jenna
 export const getAllChildrenForParent = parentID => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -458,11 +463,15 @@ export const getAllChildrenForParent = parentID => {
 export const updateMoney = (parentID, pMoney) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Updating money for parent who is logged in 
+      // Updating money for parent who is logged in
       tx.executeSql(
         'UPDATE ' +
           parentTable +
-          ' SET parentMoney = '+ pMoney +' WHERE parentId =' + parentID +';',
+          ' SET parentMoney = ' +
+          pMoney +
+          ' WHERE parentId =' +
+          parentID +
+          ';',
         [],
         // If the transaction succeeds, this is called
         () => {
@@ -472,7 +481,7 @@ export const updateMoney = (parentID, pMoney) => {
         (_, err) => {
           reject(err);
         },
-        );
+      );
     });
   });
   return promise;

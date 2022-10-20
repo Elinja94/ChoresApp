@@ -16,12 +16,14 @@ export const UserContext = React.createContext();
 
 const App = () => {
   // To set username, so information can be used when logged in
-  const [user, setUser] = useState('Reed');
+  const [user, setUser] = useState({});
   // The navigation system, no header and login to be default screen
   return (
     <UserContext.Provider value={user}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{headerShown: false}}>
           <Stack.Screen name="Login">
             {props => <Login {...props} setUser={setUser} />}
           </Stack.Screen>
