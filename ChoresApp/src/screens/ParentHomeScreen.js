@@ -19,6 +19,7 @@ const ParentHomeScreen = props => {
     const [chores, setChore] = useState([]);
     const [childChores, setChildChore] = useState([]);
 
+    // Getting all the parent's children by Jenna
     async function getChildren() {
         try {
           const childIDs = await getAllChildrenForParent(user.parentID);
@@ -59,7 +60,11 @@ const ParentHomeScreen = props => {
                 renderItem={i => (
                     <View>
                         <Heading style={styles.heading}>{i.item.childUsername}</Heading>
-                        
+                        <FlatList
+                        data={children}
+                        keyExtractor={item => item.childID}
+                        renderItem={i => ( <AppText style={styles.child}>jtn</AppText>
+                        )}></FlatList>
                     </View>
                 )}
                 style={{width: '100%'}}></FlatList>

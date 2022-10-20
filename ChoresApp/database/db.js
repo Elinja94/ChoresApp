@@ -57,7 +57,7 @@ export const init = () => {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS ' +
           choresTable +
-          '(choreID INTEGER NOT NULL PRIMARY KEY, choreInfo TEXT NOT NULL);',
+          '(choreID INTEGER NOT NULL PRIMARY KEY, choreInfo TEXT NOT NULL, choreCost REAL NOT NULL);',
         // Here would be all the values
         [],
         // If the transaction succeeds, this is called
@@ -108,20 +108,31 @@ export const init = () => {
       tx.executeSql(
         'INSERT INTO ' +
           choresTable +
-          ' (choreInfo) VALUES (?),(?),(?),(?),(?),(?),(?),(?),(?),(?),(?);',
+          ' (choreInfo, choreCost) VALUES (?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?);',
         // Here would be all the values
         [
           'Clean kitchen',
+          5,
           'Clean livingroom',
+          2,
           'Clean bathroom',
+          7,
           'Clean your room',
+          9,
           'Clean backyard',
+          10,
           'Vacuum the whole house',
+          53,
           'Do dishes',
+          52,
           'Fill dishwasher',
+          1,
           'Empty dishwasher',
+          3,
           'Hang clothes',
+          8,
           'Take the thrash out',
+          4,
         ],
         // If the transaction succeeds, this is called
         () => {
@@ -484,7 +495,7 @@ export const all = () => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + parentTable,
+        'select * from ' + choresTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
