@@ -487,6 +487,28 @@ export const updateMoney = (parentID, pMoney) => {
   return promise;
 };
 
+export const getAllChores = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'select choreID, choreInfo from ' + choresTable,
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 // Only for testing
 export const all = () => {
   const promise = new Promise((resolve, reject) => {

@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {UserContext} from '../../App.js';
+import {
+  getAllChildrenForParent,
+  getAllChores,
+  getChild,
+} from '../../database/db.js';
 import {COLORS} from '../colors.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -13,10 +18,55 @@ import Navigation from '../components/Navigation';
 const AddChore = props => {
   const [chore, setChore] = useState('');
   const [child, setChild] = useState('');
+  const [chores, setChores] = useState([]);
+  const [children, setChildren] = useState([]);
+  const [choreOptions, setChoreOptions] = useState([]);
+  const [childOptions, setChildOptions] = useState([]);
   const user = React.useContext(UserContext);
 
-  const children = ['a', 'b', 'c'];
-  const chores = ['wash dishes', 'do laundry', 'take the trash out'];
+  async function getChores() {
+    try {
+      const choresList = await getAllChores();
+      setChores(choresList);
+
+      const options = [];
+      for (c of choresList) {
+        options.push(c.choreInfo);
+      }
+
+      setChoreOptions(options);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getChildren() {
+    try {
+      const childIDs = await getAllChildrenForParent(user.parentID);
+      const childrenList = [];
+
+      for (c of childIDs) {
+        const childObject = await getChild(c);
+        childrenList.push(childObject);
+      }
+
+      setChildren(childrenList);
+
+      const options = [];
+      for (c of childrenList) {
+        options.push(c.childUsername);
+      }
+
+      setChildOptions(options);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getChores();
+    getChildren();
+  }, []);
 
   return (
     <MainContainer>
@@ -24,23 +74,23 @@ const AddChore = props => {
       <Container>
         <AppText>Chore:</AppText>
         <ModalDropdown
-          options={chores}
+          options={choreOptions}
           style={styles.modalDropdown}
           textStyle={styles.dropdownText}
           dropdownStyle={styles.dropdown}
           dropdownTextStyle={styles.dropdownText}
           defaultValue="Select chore"
-          onSelect={index => setChore(chores[index])}
+          onSelect={index => setChore(choreOptions[index])}
         />
         <AppText>Child:</AppText>
         <ModalDropdown
-          options={children}
+          options={childOptions}
           style={styles.modalDropdown}
           textStyle={styles.dropdownText}
           dropdownStyle={styles.dropdown}
           dropdownTextStyle={styles.dropdownText}
           defaultValue="Select child"
-          onSelect={index => setChild(children[index])}
+          onSelect={index => setChild(childOptions[index])}
         />
         <AppButton style={styles.button}>Add</AppButton>
       </Container>
@@ -64,7 +114,8 @@ const styles = StyleSheet.create({
   dropdown: {
     fontSize: 20,
     marginTop: 8,
-    width: 200,
+    height: 300,
+    width: 250,
   },
   dropdownText: {
     fontSize: 18,
