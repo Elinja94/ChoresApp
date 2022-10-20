@@ -49,7 +49,7 @@ const ChildForm = props => {
           Add
         </AppButton>
       </Container>
-      <BottomBar text={user.parentUsername} />
+      <BottomBar text={user.parentUsername} navigation={props.navigation} />
     </MainContainer>
   );
 };

@@ -10,7 +10,15 @@ const BottomBar = ({navigation, text, money}) => {
       <Pressable style={styles.money} onPress={() => navigation.navigate("MoneyForm")}>
         <AppText>Money: {money} €</AppText>
       </Pressable>
-      <AppButton style={styles.account}>{text}</AppButton>
+      <AppButton
+        style={styles.account}
+        onPress={
+          text !== 'Log out'
+            ? () => navigation.navigate('AccountSettings')
+            : () => navigation.navigate('Login')
+        }>
+        {text}
+      </AppButton>
     </View>
   );
 };
