@@ -299,7 +299,7 @@ export const addParent = (pUser, pPass) => {
 };
 
 // Child registration by Jenna
-export const addChild = (cUser, cPass, cMoney) => {
+export const addChild = (cUser, cPass) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       // Making password more secure, not plain text
@@ -311,7 +311,7 @@ export const addChild = (cUser, cPass, cMoney) => {
             childTable +
             ' (childUsername, childPassword, childMoney) values(?,?,?);',
           // Values for the placeholders
-          [cUser, hashed, cMoney],
+          [cUser, hashed, 0],
           // If the transaction succeeds, this is called
           () => {
             resolve();
@@ -597,7 +597,7 @@ export const all = () => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + childParentTable,
+        'select * from ' + childChoreTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array

@@ -4,7 +4,7 @@ import {UserContext} from '../../App.js';
 import {
   addChild,
   addChildParentConnection,
-  getChildId,
+  getChildID,
 } from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -23,7 +23,7 @@ const ChildForm = props => {
     try {
       const dbResult = await addChild(username, password);
       console.log('dbResult: ' + dbResult);
-      const {childID} = await getChildId(username);
+      const {childID} = await getChildID(username);
       const parentID = user.parentID;
       await addChildParentConnection(childID, parentID);
       props.navigation.navigate('AccountSettings');
