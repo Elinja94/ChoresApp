@@ -19,6 +19,7 @@ const ParentHomeScreen = props => {
     const [children, setChildren] = useState([]);
     const [chores, setChore] = useState([]);
     const [childChores, setChildChore] = useState([]);
+    const [everything, setEverything] = useState([]);
 
     // Getting all the parent's children by Jenna
     async function getChildren() {
@@ -58,14 +59,36 @@ const ParentHomeScreen = props => {
             console.log(err);
         }
       }
-
-      async function getAll() {
-        try {
-            const chore = await all();
+      
+      // Setting new array to use on flatlist
+      function setAll() {
+        console.log("new");
+        const eveythingList = [];
+        let childChoreid = 0;
+        let child = "";
+        let chore = "";
+        let done = 0;
+        for (cc of childChores) {
+            for (c of chores) {
+                if (cc.chore == c.choreID){
+                    for (ch of children) {
+                        if (ch.childID == cc.child) {
+                        childChoreid = cc.childchoreID;
+                        child = ch.childUsername;
+                        chore = c.choreInfo;
+                        done = cc.done;
+                        console.log(childChoreid);
+                        console.log(child);
+                        console.log(chore);
+                        console.log(done);                
+                        }
+                    }
+                }
+            }
+            eveythingList.push({"childchoreid": childChoreid, "child": child, "chore": chore, "done": done});
         }
-        catch(err) {
-            console.log(err);
-        }
+        setEverything(eveythingList);
+        console.log(everything);
       }
 
     useEffect(() => {
@@ -73,7 +96,8 @@ const ParentHomeScreen = props => {
         getChildren();
         getChore();
         getChildChore();
-        getAll();
+        setAll();
+        everything;
         user;
     }
     }, [isFocused]);
@@ -89,40 +113,22 @@ const ParentHomeScreen = props => {
                 </View>
             <Container style={{width: '80%'}}>
             <FlatList
-            data={children}
-            keyExtractor={item => item.childID}
-            renderItem={i => (
-                <View>
-                    <Heading style={styles.heading}>{i.item.childUsername}</Heading>
-                    <FlatList
-                    data={chores}
-                    keyExtractor={item => item.choreID}
-                    renderItem={(c)=> ( 
-                            <FlatList
-                            data={childChores}
-                            keyExtractor={item => item.childChoreID}
-                            renderItem={cc => ( 
-                                cc.item.child == i.item.childID ? (
-                                    c.item.choreID == cc.item.chore ? (
-                                        cc.item.done == 0 ? (
-                                            <View style={styles.container}>
-                                                <AppText style={styles.chore}>{c.item.choreInfo}</AppText>
-                                                <AppText style={styles.notdone}>●</AppText>
-                                            </View>
-                                        ) : (
-                                            <View style={styles.container}>
-                                                <AppText style={styles.chore}>{c.item.choreInfo}</AppText>
-                                                <AppText style={styles.done}>●</AppText>
-                                            </View>
-                                        ) 
-                                    ) : (null) 
-                                ) : (null)
-                            )}></FlatList>
-
-                        )}></FlatList>
-                </View>
-            )}
-            style={{width: '100%'}}></FlatList>
+                data={everything}
+                keyExtractor={item => item.childchoreid}
+                renderItem={i => (
+                    i.item.done == 0 ? ( 
+                        <View style={styles.container}>
+                            <AppText style={styles.chore}>{i.item.child}: {i.item.chore}</AppText>
+                            <AppText style={styles.notdone}>●</AppText>
+                        </View>
+                    ) : (
+                        <View style={styles.container}>
+                            <AppText style={styles.chore}>{c.item.choreInfo}</AppText>
+                            <AppText style={styles.done}>●</AppText>
+                        </View>
+                    )
+                )}
+                style={{width: '100%'}}></FlatList>
             </Container>
             <BottomBar money={user.parentMoney} text={user.parentUsername} navigation={props.navigation}/>
         </MainContainer>
