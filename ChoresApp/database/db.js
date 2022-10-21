@@ -470,7 +470,7 @@ export const getAllChildrenForParent = parentID => {
   return promise;
 };
 
-// Parents adding money to their account
+// Parents adding money to their account by Sonja
 export const updateMoney = (parentID, pMoney) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -544,13 +544,60 @@ export const addChore = (childID, choreID) => {
   return promise;
 };
 
+// Get everything from chores
+export const getAllChore = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM ' + choresTable,
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+// Get all from childchore by Sonja
+export const getAllChildChore = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM ' + childChoreTable,
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+
 // Only for testing
 export const all = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + choresTable,
+        'select * from ' + childParentTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
