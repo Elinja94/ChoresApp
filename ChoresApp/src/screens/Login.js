@@ -7,6 +7,7 @@ import {
   loginCheckParent,
   loginCheckChild,
   getParentUser,
+  getChildUser
 } from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -48,6 +49,11 @@ const Login = props => {
           const user = await getParentUser(username);
           props.setUser(user);
           props.navigation.navigate('ParentHomeScreen');
+        }
+        else {
+          const user = await getChildUser(username);
+          props.setUser(user);
+          props.navigation.navigate('ChildHomeScreen');
         }
       } 
       // If infomration didn't match
