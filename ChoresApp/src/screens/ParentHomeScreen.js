@@ -60,7 +60,6 @@ const ParentHomeScreen = props => {
       async function getAll() {
         try {
             const chore = await all();
-            console.log(chore)
         }
         catch(err) {
             console.log(err);
@@ -85,7 +84,7 @@ const ParentHomeScreen = props => {
                 <AppButton style={styles.button} onPress={() => props.navigation.navigate("AddChore")}>
                     +
                 </AppButton>
-                </View>
+            </View>
             <Container style={{width: '80%'}}>
             <FlatList
                 data={children}

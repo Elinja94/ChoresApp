@@ -359,6 +359,36 @@ export const getParentUser = username => {
   return promise;
 };
 
+// Get parent user by Sonja
+export const getChildUser = username => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT childID, childUsername, childMoney FROM ' +
+          childTable +
+          ' WHERE childUsername = "' +
+          username +
+          '"',
+        [],
+        (tx, result) => {
+          // Making sure there is user with given name
+          var len = result.rows.length;
+          if (len > 0) {
+            let row = result.rows.item(0);
+            resolve(row);
+          }
+        },
+        (tx, err) => {
+          console.log('Err');
+          console.log(err);
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 // Connect child to parent (when registering a child) by Jenna
 export const addChildParentConnection = (childID, parentID) => {
   const promise = new Promise((resolve, reject) => {
@@ -590,6 +620,33 @@ export const getAllChildChore = () => {
   return promise;
 };
 
+// Get child's chores from childchore by Sonja
+export const getChildChore = (childID) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'select * from ' +
+          childChoreTable +
+          ' WHERE child = "' +
+          childID +
+          '"',
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 
 // Only for testing
 export const all = () => {
@@ -597,7 +654,7 @@ export const all = () => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + childChoreTable,
+        'select * from ' + childTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
