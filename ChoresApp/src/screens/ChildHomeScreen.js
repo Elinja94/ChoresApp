@@ -19,6 +19,7 @@ const ChildHomeScreen = props => {
     const [chores, setChore] = useState([]);
     const [childChores, setChildChore] = useState([]);
 
+    // Getting information for chores
     async function getChore() {
         try {
             const chore = await getAllChore();
@@ -29,11 +30,13 @@ const ChildHomeScreen = props => {
         }
     }
 
+    // Getting current child's chores
     async function getChildChores() {
         try {
             const childID = user.childID;
             const chore = await getChildChore(childID);
-            setChildChore(chore); 
+            setChildChore(chore);
+            console.log(childChores.length);
         }
         catch(err) {
             console.log(err);
@@ -51,31 +54,32 @@ const ChildHomeScreen = props => {
     // The visual part
     return (
         <MainContainer>
-            <View style={styles.container}>
+            <View style={{textAlign:'center'}}>
                 <Heading style={styles.heading}>Chores List</Heading>
-                <AppButton style={styles.button} onPress={() => props.navigation.navigate("AddChore")}>
-                    +
-                </AppButton>
             </View>
             <Container style={{width: '80%'}}>
             <FlatList
+            data={chores}
+            keyExtractor={item => item.choreID}
+            renderItem={(c)=> ( 
+                <FlatList
                 data={childChores}
-                keyExtractor={item => item.childchoreID}
+                keyExtractor={item => item.childChoreID}
                 renderItem={cc => ( 
-                <View>
-                    <FlatList
-                        data={chores}
-                        keyExtractor={item => item.choreID}
-                        renderItem={c => ( 
-                            c.item.choreID == cc.item.chore ? (
-                                cc.item.done == 0 ? (
-                                    <AppText style={styles.chore}>{c.item.choreInfo} <AppText style={{color: 'red', textAlign: 'right'}}>●</AppText></AppText>
-                                ) : (
-                                    <AppText style={styles.chore}>{c.item.choreInfo} <AppText style={{color: 'green', textAlign: 'right'}}>●</AppText></AppText>    
-                                )
-                            ) : (null)                                        
-                        )}></FlatList>
-                    </View>
+                    c.item.choreID == cc.item.chore ? (
+                        cc.item.done == 0 ? (
+                            <View style={styles.container}>
+                                <AppText style={styles.chore}>{c.item.choreInfo}</AppText>
+                                <AppText style={styles.notdone}>●</AppText>
+                            </View>
+                        ) : (
+                            <View style={styles.container}>
+                                <AppText style={styles.chore}>{c.item.choreInfo}</AppText>
+                                <AppText style={styles.done}>●</AppText>
+                            </View>
+                        )
+                    ) : (null)                                        
+                )}></FlatList> 
             )} style={{width: '100%'}}></FlatList>
             </Container>
             <BottomBar money={user.childMoney} text="Log out" navigation={props.navigation}/>
@@ -91,7 +95,6 @@ const styles = StyleSheet.create({
     },
 
     chore: {
-        backgroundColor: COLORS.white,
         flex: 3,
         fontSize: 22,
         marginRight: 5,
@@ -99,7 +102,26 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     },
 
+    done: {
+        flex: 0.2,
+        fontSize: 22,
+        marginRight: 5,
+        paddingLeft: 5,
+        textAlignVertical: 'center',
+        color: 'green',
+    },
+
+    notdone: {
+        flex: 0.2,
+        fontSize: 22,
+        marginRight: 5,
+        paddingLeft: 5,
+        textAlignVertical: 'center',
+        color: 'red',
+    },
+
     container: {
+        backgroundColor: COLORS.white,
         flexDirection: 'row',
         height: 50,
         marginTop: 5,
