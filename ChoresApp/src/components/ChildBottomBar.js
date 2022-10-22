@@ -1,8 +1,12 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View, Alert} from 'react-native';
 import {COLORS} from '../colors';
 import AppButton from './AppButton';
 import AppText from './AppText';
+
+const logout=()=> {
+    
+}
 
 const BottomBar = ({navigation, text, money}) => {
   return (
@@ -10,7 +14,11 @@ const BottomBar = ({navigation, text, money}) => {
       <Pressable style={styles.money}>
         <AppText>Money: {money} €</AppText>
       </Pressable>
-      <AppButton style={styles.account} onPress={() => navigation.navigate("Login")}>{text}</AppButton>
+      <AppButton style={styles.account} onPress={() => 
+            Alert.alert("","Do you want to log out?",[
+            {text: "Yes", onPress:()=> navigation.navigate('Login')},
+            {text: "No"}
+    ])}>{text}</AppButton>
     </View>
   );
 };
