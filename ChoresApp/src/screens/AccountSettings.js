@@ -67,7 +67,12 @@ const AccountSettings = props => {
           )}
           style={{width: '100%'}}></FlatList>
       </Container>
-      <BottomBar text="Log out" navigation={props.navigation} />
+      <BottomBar
+        text="Log out"
+        navigation={props.navigation}
+        logout={true}
+        setUser={() => props.setUser()}
+      />
     </MainContainer>
   );
 };

@@ -31,7 +31,9 @@ const App = () => {
           <Stack.Screen name="ParentHomeScreen" component={ParentHomeScreen} />
           <Stack.Screen name="AddChore" component={AddChore} />
           <Stack.Screen name="MoneyForm" component={MoneyForm} />
-          <Stack.Screen name="AccountSettings" component={AccountSettings} />
+          <Stack.Screen name="AccountSettings">
+            {props => <AccountSettings {...props} setUser={setUser} />}
+          </Stack.Screen>
           <Stack.Screen name="ChildForm" component={ChildForm} />
         </Stack.Navigator>
       </NavigationContainer>
