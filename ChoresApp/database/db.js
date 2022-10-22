@@ -348,6 +348,40 @@ export const getParentUser = username => {
   return promise;
 };
 
+// Parents changing password to their account by Jenna
+export const updatePassword = (parentID, pPass) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      if (pPass.length === 0) {
+        resolve('Password length must be over 0 characters');
+        return promise;
+      }
+      sha256(pPass).then(hash => {
+        hashed = hash;
+        tx.executeSql(
+          'UPDATE ' +
+            parentTable +
+            ' SET parentPassword = "' +
+            hashed +
+            '"' +
+            ' WHERE parentID =' +
+            parentID +
+            ';',
+          [],
+          () => {
+            resolve();
+          },
+          // If the transaction fails, this is called
+          (_, err) => {
+            reject(err);
+          },
+        );
+      });
+    });
+  });
+  return promise;
+};
+
 // Connect child to parent (when registering a child) by Jenna
 export const addChildParentConnection = (childID, parentID) => {
   const promise = new Promise((resolve, reject) => {
@@ -516,7 +550,9 @@ export const addChore = (childID, choreID) => {
     db.transaction(tx => {
       // Prepared statement with placeolders
       tx.executeSql(
-        'insert into ' + childChoreTable + ' (child, chore, done) values(?,?, ?);',
+        'insert into ' +
+          childChoreTable +
+          ' (child, chore, done) values(?,?, ?);',
         // Values for the placeholders
         [childID, choreID, false],
         // If the transaction succeeds, this is called

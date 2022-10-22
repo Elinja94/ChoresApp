@@ -2,7 +2,11 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {UserContext} from '../../App';
-import {getAllChildrenForParent, getChild} from '../../database/db';
+import {
+  getAllChildrenForParent,
+  getChild,
+  updatePassword,
+} from '../../database/db';
 import {COLORS} from '../colors';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -16,6 +20,7 @@ import Navigation from '../components/Navigation';
 const AccountSettings = props => {
   const user = React.useContext(UserContext);
   const isFocused = useIsFocused();
+  const [newPassword, setNewPassword] = useState('');
   const [children, setChildren] = useState([]);
 
   async function getChildren() {
@@ -41,14 +46,34 @@ const AccountSettings = props => {
     }
   }, [isFocused]);
 
+  async function changePassword() {
+    if (newPassword.length === 0) {
+      alert('Password field is empty');
+      return;
+    }
+
+    try {
+      const dbResult = await updatePassword(user.parentID, newPassword);
+      console.log('dbResult: ', dbResult);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <MainContainer>
       <Navigation title="Account Settings" navigation={props.navigation} />
       <Container style={{width: '80%'}}>
         <AppText>New password:</AppText>
         <View style={styles.container}>
-          <Input style={styles.input} />
-          <AppButton style={styles.button}>Change</AppButton>
+          <Input
+            style={styles.input}
+            onChangeText={text => setNewPassword(text)}
+            secureTextEntry={true}
+          />
+          <AppButton style={styles.button} onPress={() => changePassword()}>
+            Change
+          </AppButton>
         </View>
         <TouchableOpacity
           onPress={() => props.navigation.navigate('ChildForm')}
