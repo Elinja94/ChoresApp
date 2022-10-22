@@ -4,14 +4,13 @@ import {useIsFocused} from '@react-navigation/native';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../colors';
 import {UserContext} from '../../App.js';
-import {getAllChildrenForParent, getChild, getAllChore, getAllChildChore,all} from '../../database/db';
+import {getAllChildrenForParent, getChild, getAllChore, getAllChildChore} from '../../database/db';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
 import BottomBar from '../components/BottomBar';
 import Container from '../components/Container';
 import Heading from '../components/Heading';
 import MainContainer from '../components/MainContainer';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const ParentHomeScreen = props => {
     const user = React.useContext(UserContext);
@@ -61,8 +60,7 @@ const ParentHomeScreen = props => {
       }
       
       // Setting new array to use on flatlist
-      function setAll() {
-        console.log("new");
+      function setAll() {;
         const eveythingList = [];
         let childChoreid = 0;
         let child = "";
@@ -76,11 +74,7 @@ const ParentHomeScreen = props => {
                         childChoreid = cc.childchoreID;
                         child = ch.childUsername;
                         chore = c.choreInfo;
-                        done = cc.done;
-                        console.log(childChoreid);
-                        console.log(child);
-                        console.log(chore);
-                        console.log(done);                
+                        done = cc.done;               
                         }
                     }
                 }
@@ -88,7 +82,6 @@ const ParentHomeScreen = props => {
             eveythingList.push({"childchoreid": childChoreid, "child": child, "chore": chore, "done": done});
         }
         setEverything(eveythingList);
-        console.log(everything);
       }
 
     useEffect(() => {
@@ -106,29 +99,32 @@ const ParentHomeScreen = props => {
     return (
         <MainContainer>
             <View style={styles.container}>
+                <AppButton style={styles.refreshButton} onPress={() => setAll()}>↺</AppButton>
                 <Heading style={styles.heading}>Chores List</Heading>
                 <AppButton style={styles.button} onPress={() => props.navigation.navigate("AddChore")}>
                     +
                 </AppButton>
                 </View>
-            <Container style={{width: '80%'}}>
+            <Container style={{width: '80%', height:'85%'}}>
+            <AppText style={{textAlign:'center'}}>Green = done Red = notdone</AppText>
             <FlatList
                 data={everything}
                 keyExtractor={item => item.childchoreid}
                 renderItem={i => (
                     i.item.done == 0 ? ( 
-                        <View style={styles.container}>
+                        <View style={styles.choresContainer}>
                             <AppText style={styles.chore}>{i.item.child}: {i.item.chore}</AppText>
                             <AppText style={styles.notdone}>●</AppText>
                         </View>
                     ) : (
-                        <View style={styles.container}>
-                            <AppText style={styles.chore}>{c.item.choreInfo}</AppText>
+                        <View style={styles.choresContainer}>
+                            <AppText style={styles.chore}>{i.item.child}: {i.item.chore}</AppText>
                             <AppText style={styles.done}>●</AppText>
                         </View>
                     )
                 )}
                 style={{width: '100%'}}></FlatList>
+                <AppText></AppText>
             </Container>
             <BottomBar money={user.parentMoney} text={user.parentUsername} navigation={props.navigation}/>
         </MainContainer>
@@ -136,6 +132,12 @@ const ParentHomeScreen = props => {
 };
 // Style
 const styles = StyleSheet.create({
+    refreshButton: {
+        height: 40,
+        width: 40,
+        marginRight: 50,
+    },
+    
     button: {
         height: 40,
         width: 40,
@@ -172,6 +174,13 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         height: 50,
+        marginTop: 5,
+    },
+
+    choresContainer: {
+        backgroundColor: COLORS.white,
+        flexDirection: 'row',
+        minHeight: 50,
         marginTop: 5,
     },
 

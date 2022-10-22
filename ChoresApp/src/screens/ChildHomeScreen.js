@@ -4,14 +4,13 @@ import {useIsFocused} from '@react-navigation/native';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../colors';
 import {UserContext} from '../../App.js';
-import {getAllChore, getChildChore, all} from '../../database/db';
+import {getAllChore, getChildChore, updateDone} from '../../database/db';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
-import BottomBar from '../components/BottomBar';
+import ChildBottomBar from '../components/ChildBottomBar';
 import Container from '../components/Container';
 import Heading from '../components/Heading';
 import MainContainer from '../components/MainContainer';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const ChildHomeScreen = props => {
     const user = React.useContext(UserContext);
@@ -37,7 +36,6 @@ const ChildHomeScreen = props => {
             const childID = user.childID;
             const chore = await getChildChore(childID);
             setChildChore(chore);
-            console.log(childChores.length);
         }
         catch(err) {
             console.log(err);
@@ -46,7 +44,6 @@ const ChildHomeScreen = props => {
 
     // Setting new array to use on flatlist
     const setAll=()=> {
-        console.log("new");
         const eveythingList = [];
         let childChoreid = 0;
         let child = "";
@@ -70,7 +67,6 @@ const ChildHomeScreen = props => {
     if (isFocused) {
         getChore();
         getChildChores();
-        setAll();
         user;
     }
     }, [isFocused]);
@@ -78,38 +74,41 @@ const ChildHomeScreen = props => {
     // The visual part
     return (
         <MainContainer>
-            <View style={{textAlign:'center'}}>
+            <View style={styles.container}>
+                <AppButton style={styles.refreshButton} onPress={() => setAll()}>↺</AppButton>
                 <Heading style={styles.heading}>Chores List</Heading>
             </View>
-            <Container style={{width: '80%'}}>
-            <FlatList
-                data={everything}
-                keyExtractor={item => item.childchoreid}
-                renderItem={i => (
-                    i.item.done == 0 ? ( 
-                        <View style={styles.container}>
-                            <AppText style={styles.chore}>{i.item.chore}</AppText>
-                            <AppText style={styles.notdone}>●</AppText>
-                        </View>
-                    ) : (
-                        <View style={styles.container}>
-                            <AppText style={styles.chore}>{i.item.chore}</AppText>
-                            <AppText style={styles.done}>●</AppText>
-                        </View>
-                    )
-                )}
-                style={{width: '100%'}}></FlatList>
+            <Container style={{width: '80%', height:'80%'}}>
+                <AppText style={{textAlign:'center'}}>Green = done Red = notdone</AppText>
+                <FlatList
+                    data={everything}
+                    keyExtractor={item => item.childchoreid}
+                    renderItem={i => (
+                        i.item.done == 0 ? ( 
+                                <View style={styles.choresContainer}>
+                                    <AppText style={styles.chore}>{i.item.chore}</AppText>
+                                    <AppText style={styles.notdone}>●</AppText>
+                                </View>
+                        ) : (
+                            <View style={styles.choresContainer}>
+                                <AppText style={styles.chore}>{i.item.chore}</AppText>
+                                <AppText style={styles.done}>●</AppText>
+                            </View>
+                        )
+                    )}
+                    style={{width: '100%'}}></FlatList>
             </Container>
-            <BottomBar money={user.childMoney} text="Log out" navigation={props.navigation}/>
+            <ChildBottomBar money={user.childMoney} text="Log out" navigation={props.navigation}/>
         </MainContainer>
     );
 };
 // Style
 const styles = StyleSheet.create({
-    button: {
+    refreshButton: {
         height: 40,
         width: 40,
-        marginLeft: 70
+        marginLeft: -60,
+        marginRight: 50,
     },
 
     chore: {
@@ -139,6 +138,12 @@ const styles = StyleSheet.create({
     },
 
     container: {
+        flexDirection: 'row',
+        height: 50,
+        marginTop: 5,
+    },
+
+    choresContainer: {
         backgroundColor: COLORS.white,
         flexDirection: 'row',
         height: 50,
@@ -149,13 +154,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginBottom: 3,
         marginTop: 5,
-    },
-
-    input: {
-        flex: 3,
-        height: '100%',
-        marginRight: 5,
-        marginTop: 0,
     },
 });
 
