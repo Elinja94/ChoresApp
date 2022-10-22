@@ -63,6 +63,20 @@ const ChildHomeScreen = props => {
         setEverything(eveythingList);
       }
 
+    // Setting chore done
+    async function setDone(id) {
+        await updateDone(id, true);
+        getChore();
+        getChildChores();
+    }
+
+    // Setting chore undone
+    async function setUndone(id) {
+        await updateDone(id, false);
+        getChore();
+        getChildChores();
+    }
+
     useEffect(() => {
     if (isFocused) {
         getChore();
@@ -85,15 +99,25 @@ const ChildHomeScreen = props => {
                     keyExtractor={item => item.childchoreid}
                     renderItem={i => (
                         i.item.done == 0 ? ( 
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => setDone(i.item.childchoreid)}>
+                                    <View style={styles.choresContainer}>
+                                        <AppText style={styles.chore}>{i.item.chore}</AppText>
+                                        <AppText style={styles.notdone}>●</AppText>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        ) : (
+                            <View>
+                            <TouchableOpacity
+                                onPress={() => setUndone(i.item.childchoreid)}>
                                 <View style={styles.choresContainer}>
                                     <AppText style={styles.chore}>{i.item.chore}</AppText>
-                                    <AppText style={styles.notdone}>●</AppText>
+                                    <AppText style={styles.done}>●</AppText>
                                 </View>
-                        ) : (
-                            <View style={styles.choresContainer}>
-                                <AppText style={styles.chore}>{i.item.chore}</AppText>
-                                <AppText style={styles.done}>●</AppText>
-                            </View>
+                            </TouchableOpacity>
+                        </View>
                         )
                     )}
                     style={{width: '100%'}}></FlatList>
