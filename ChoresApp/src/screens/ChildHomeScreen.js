@@ -122,7 +122,7 @@ const ChildHomeScreen = props => {
                     )}
                     style={{width: '100%'}}></FlatList>
             </Container>
-            <ChildBottomBar money={user.childMoney} text="Log out" navigation={props.navigation}/>
+            <ChildBottomBar money={user.childMoney} text={user.childUsername} navigation={props.navigation}/>
         </MainContainer>
     );
 };
