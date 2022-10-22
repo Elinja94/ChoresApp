@@ -647,6 +647,34 @@ export const getChildChore = (childID) => {
   return promise;
 };
 
+// Updating done status
+export const updateDone = (id, done) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Updating money for parent who is logged in
+      tx.executeSql(
+        'UPDATE ' +
+          childChoreTable +
+          ' SET done = ' +
+          done +
+          ' WHERE childChoreID =' +
+          id +
+          ';',
+        [],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 
 // Only for testing
 export const all = () => {
@@ -654,7 +682,7 @@ export const all = () => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + childTable,
+        'select * from ' + childChoreTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
