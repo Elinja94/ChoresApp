@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {COLORS} from '../colors';
 import AppButton from './AppButton';
