@@ -544,11 +544,7 @@ export const getChild = childID => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT childID, childUsername FROM ' +
-          childTable +
-          ' WHERE childID = "' +
-          childID +
-          '"',
+        'SELECT * FROM ' + childTable + ' WHERE childID = "' + childID + '"',
         [],
         (tx, result) => {
           var len = result.rows.length;
@@ -606,6 +602,34 @@ export const updateMoney = (parentID, pMoney) => {
           pMoney +
           ' WHERE parentId =' +
           parentID +
+          ';',
+        [],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+// Parents adding money to their childrens account
+export const updateChildMoney = (childID, cMoney) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Updating money for parent who is logged in
+      tx.executeSql(
+        'UPDATE ' +
+          childTable +
+          ' SET childMoney = ' +
+          cMoney +
+          ' WHERE childId =' +
+          childID +
           ';',
         [],
         // If the transaction succeeds, this is called

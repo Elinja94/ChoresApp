@@ -9,6 +9,8 @@ import {
   getChild,
   getAllChore,
   getAllChildChore,
+  updateMoney,
+  updateChildMoney,
 } from '../../database/db';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -82,6 +84,8 @@ const ParentHomeScreen = props => {
               chore = c.choreInfo;
               done = cc.done;
               chorecost = c.choreCost;
+              childID = ch.childID;
+              childMoney = ch.childMoney;
             }
           }
         }
@@ -92,6 +96,8 @@ const ParentHomeScreen = props => {
         chore: chore,
         done: done,
         chorecost: chorecost,
+        childID: childID,
+        childMoney: childMoney,
       });
     }
     setEverything(eveythingList);
@@ -108,6 +114,18 @@ const ParentHomeScreen = props => {
       chore: item.chore,
     });
   };
+
+  async function makePayment(childID, childMoney, paymentAmount) {
+    const updatedParentMoney = user.parentMoney - paymentAmount;
+    const updatedChildMoney = childMoney + paymentAmount;
+
+    try {
+      await updateMoney(user.parentID, updatedParentMoney);
+      await updateChildMoney(childID, updatedChildMoney);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     if (isFocused) {
@@ -154,6 +172,13 @@ const ParentHomeScreen = props => {
                 <PaymentModal
                   modalVisible={modalVisible}
                   setModalVisible={setModalVisible}
+                  makePayment={() =>
+                    makePayment(
+                      i.item.childID,
+                      i.item.childMoney,
+                      i.item.chorecost,
+                    )
+                  }
                   {...modalProps}
                 />
                 <View style={styles.choresContainer}>

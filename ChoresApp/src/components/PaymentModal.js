@@ -11,7 +11,13 @@ const PaymentModal = ({
   child,
   choreCost,
   chore,
+  makePayment,
 }) => {
+  const handlePress = () => {
+    setModalVisible(false);
+    makePayment();
+  };
+
   return (
     <ReactNativeModal isVisible={modalVisible}>
       <View style={styles.container}>
@@ -20,9 +26,7 @@ const PaymentModal = ({
             styles.text
           }>{`Do you want to pay to ${child} ${choreCost} from chore ${chore}`}</AppText>
         <View style={styles.buttonContainer}>
-          <AppButton
-            style={styles.button}
-            onPress={() => setModalVisible(false)}>
+          <AppButton style={styles.button} onPress={handlePress}>
             Yes
           </AppButton>
           <AppButton
