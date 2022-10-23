@@ -1,6 +1,7 @@
 // Sonja and Jenna
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {init} from './database/db.js';
 import React, {useState} from 'react';
 import AccountSettings from './src/screens/AccountSettings';
 import AddChild from './src/screens/AddChild';
@@ -11,6 +12,15 @@ import ChildHomeScreen from './src/screens/ChildHomeScreen';
 import MoneyForm from './src/screens/MoneyForm';
 import AddChore from './src/screens/AddChore';
 import EditChild from './src/screens/EditChild';
+
+// To create and check connection to database
+init()
+  .then(() => {
+    console.log('Database creation succeeded!');
+  })
+  .catch(err => {
+    console.log('Database IS NOT initialized! ' + err);
+  });
 
 // These are needed for the navigation system
 const Stack = createNativeStackNavigator();
