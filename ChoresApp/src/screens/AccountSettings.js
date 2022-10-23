@@ -87,7 +87,16 @@ const AccountSettings = props => {
           renderItem={i => (
             <View style={styles.container}>
               <AppText style={styles.child}>{i.item.childUsername}</AppText>
-              <AppButton style={styles.button}>Edit</AppButton>
+              <AppButton
+                style={styles.button}
+                onPress={() =>
+                  props.navigation.navigate('EditChild', {
+                    childID: i.item.childID,
+                    childUsername: i.item.childUsername,
+                  })
+                }>
+                Edit
+              </AppButton>
             </View>
           )}
           style={{width: '100%'}}></FlatList>
