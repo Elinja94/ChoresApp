@@ -57,7 +57,7 @@ export const init = () => {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS ' +
           choresTable +
-          '(choreID INTEGER NOT NULL PRIMARY KEY, choreInfo TEXT NOT NULL);',
+          '(choreID INTEGER NOT NULL PRIMARY KEY, choreInfo TEXT NOT NULL, choreCost REAL NOT NULL);',
         // Here would be all the values
         [],
         // If the transaction succeeds, this is called
@@ -108,20 +108,31 @@ export const init = () => {
       tx.executeSql(
         'INSERT INTO ' +
           choresTable +
-          ' (choreInfo) VALUES (?),(?),(?),(?),(?),(?),(?),(?),(?),(?),(?);',
+          ' (choreInfo, choreCost) VALUES (?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?),(?,?);',
         // Here would be all the values
         [
           'Clean kitchen',
+          5,
           'Clean livingroom',
+          2,
           'Clean bathroom',
+          7,
           'Clean your room',
+          9,
           'Clean backyard',
+          10,
           'Vacuum the whole house',
+          53,
           'Do dishes',
+          52,
           'Fill dishwasher',
+          1,
           'Empty dishwasher',
+          3,
           'Hang clothes',
+          8,
           'Take the thrash out',
+          4,
         ],
         // If the transaction succeeds, this is called
         () => {
@@ -442,6 +453,36 @@ export const updateChildPassword = (childID, cPass) => {
   return promise;
 };
 
+// Get parent user by Sonja
+export const getChildUser = username => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT childID, childUsername, childMoney FROM ' +
+          childTable +
+          ' WHERE childUsername = "' +
+          username +
+          '"',
+        [],
+        (tx, result) => {
+          // Making sure there is user with given name
+          var len = result.rows.length;
+          if (len > 0) {
+            let row = result.rows.item(0);
+            resolve(row);
+          }
+        },
+        (tx, err) => {
+          console.log('Err');
+          console.log(err);
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 // Connect child to parent (when registering a child) by Jenna
 export const addChildParentConnection = (childID, parentID) => {
   const promise = new Promise((resolve, reject) => {
@@ -553,7 +594,7 @@ export const getAllChildrenForParent = parentID => {
   return promise;
 };
 
-// Parents adding money to their account
+// Parents adding money to their account by Sonja
 export const updateMoney = (parentID, pMoney) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -629,13 +670,110 @@ export const addChore = (childID, choreID) => {
   return promise;
 };
 
+// Get everything from chores
+export const getAllChore = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM ' + choresTable,
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+// Get all from childchore by Sonja
+export const getAllChildChore = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM ' + childChoreTable,
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+// Get child's chores from childchore by Sonja
+export const getChildChore = childID => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'select * from ' + childChoreTable + ' WHERE child = "' + childID + '"',
+        [],
+        (tx, result) => {
+          let chores = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            chores.push(result.rows.item(i));
+          }
+          resolve(chores);
+        },
+        (tx, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
+// Updating done status
+export const updateDone = (id, done) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Updating money for parent who is logged in
+      tx.executeSql(
+        'UPDATE ' +
+          childChoreTable +
+          ' SET done = ' +
+          done +
+          ' WHERE childChoreID =' +
+          id +
+          ';',
+        [],
+        // If the transaction succeeds, this is called
+        () => {
+          resolve();
+        },
+        // If the transaction fails, this is called
+        (_, err) => {
+          reject(err);
+        },
+      );
+    });
+  });
+  return promise;
+};
+
 // Only for testing
 export const all = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       //Here we select all from the table fish
       tx.executeSql(
-        'select * from ' + parentTable,
+        'select * from ' + childChoreTable,
         [],
         (tx, result) => {
           let items = []; //Create a new empty Javascript array
