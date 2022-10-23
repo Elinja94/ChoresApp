@@ -14,23 +14,32 @@ import Input from '../components/Input';
 import MainContainer from '../components/MainContainer';
 import Navigation from '../components/Navigation';
 
-const ChildForm = props => {
+const AddChild = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const user = React.useContext(UserContext);
 
   async function child() {
+    if (!username || !password) {
+      alert('Invalid username or password');
+      return;
+    }
+
     try {
       const dbResult = await addChild(username, password);
       console.log('dbResult: ' + dbResult);
-      const {childID} = await getChildID(username);
-      const parentID = user.parentID;
-      await addChildParentConnection(childID, parentID);
-      props.navigation.navigate('AccountSettings');
+
+      if (dbResult === 'Username already taken') {
+        alert('Username already taken');
+      }
+      if (dbResult === 'Ok') {
+        const {childID} = await getChildID(username);
+        const parentID = user.parentID;
+        await addChildParentConnection(childID, parentID);
+        props.navigation.navigate('AccountSettings');
+      }
     } catch (err) {
       console.log(err);
-    } finally {
-      //No need to do anything
     }
   }
 
@@ -49,7 +58,11 @@ const ChildForm = props => {
           Add
         </AppButton>
       </Container>
-      <BottomBar text={user.parentUsername} navigation={props.navigation} />
+      <BottomBar
+        text={user.parentUsername}
+        navigation={props.navigation}
+        money={user.parentMoney}
+      />
     </MainContainer>
   );
 };
@@ -61,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChildForm;
+export default AddChild;
