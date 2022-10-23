@@ -21,13 +21,10 @@ const MoneyForm = props => {
       alert("Numbers only!");
     }
     else {
-      alert("Number:)");
       const parentID = user.parentID;
       let newMoney = user.parentMoney + +money;
-      const dbResult = await updateMoney(parentID, newMoney);
-      console.log(user.parentMoney);
+      await updateMoney(parentID, newMoney);
       user.parentMoney = newMoney;
-      console.log(user.parentMoney);
       props.navigation.navigate('ParentHomeScreen');
     }
   }

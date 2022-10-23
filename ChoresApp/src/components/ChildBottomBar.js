@@ -4,11 +4,7 @@ import {COLORS} from '../colors';
 import AppButton from './AppButton';
 import AppText from './AppText';
 
-const logout=()=> {
-    
-}
-
-const BottomBar = ({navigation, text, money}) => {
+const BottomBar = ({navigation, text, money, setUser}) => {
   return (
     <View style={styles.bar}>
       <Pressable style={styles.money}>
@@ -16,7 +12,7 @@ const BottomBar = ({navigation, text, money}) => {
       </Pressable>
       <AppButton style={styles.account} onPress={() => 
             Alert.alert("","Do you want to log out?",[
-            {text: "Yes", onPress:()=> navigation.navigate('Login')},
+            {text: "Yes", onPress:()=> (setUser({}), navigation.navigate('Login'))},
             {text: "No"}
     ])}>{text}</AppButton>
     </View>

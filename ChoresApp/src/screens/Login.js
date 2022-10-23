@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Text, Pressable} from 'react-native';
 import {COLORS} from '../colors';
 import {
-  init,
   loginCheckParent,
   loginCheckChild,
   getParentUser,
@@ -16,20 +15,11 @@ import MainContainer from '../components/MainContainer';
 import Input from '../components/Input';
 import Container from '../components/Container';
 
-// To create and check connection to database
-init()
-  .then(() => {
-    console.log('Database creation succeeded!');
-  })
-  .catch(err => {
-    console.log('Database IS NOT initialized! ' + err);
-  });
-
 const Login = props => {
   const [accountType, setAccountType] = useState('child');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  
   // Checking the login mostly by Sonja
   async function checkLogin() {
     try {

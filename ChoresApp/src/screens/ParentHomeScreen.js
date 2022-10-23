@@ -1,4 +1,4 @@
-// Made by Sonja
+// Made by Sonja and Jenna
 import React, {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -122,6 +122,7 @@ const ParentHomeScreen = props => {
     try {
       await updateMoney(user.parentID, updatedParentMoney);
       await updateChildMoney(childID, updatedChildMoney);
+      user.parentMoney = updatedParentMoney;
     } catch (err) {
       console.log(err);
     }
@@ -133,7 +134,6 @@ const ParentHomeScreen = props => {
       getChore();
       getChildChore();
       setAll();
-      everything;
       user;
     }
   }, [isFocused]);
