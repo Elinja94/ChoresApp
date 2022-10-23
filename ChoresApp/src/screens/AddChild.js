@@ -20,17 +20,26 @@ const AddChild = props => {
   const user = React.useContext(UserContext);
 
   async function child() {
+    if (!username || !password) {
+      alert('Invalid username or password');
+      return;
+    }
+
     try {
       const dbResult = await addChild(username, password);
       console.log('dbResult: ' + dbResult);
-      const {childID} = await getChildID(username);
-      const parentID = user.parentID;
-      await addChildParentConnection(childID, parentID);
-      props.navigation.navigate('AccountSettings');
+
+      if (dbResult === 'Username already taken') {
+        alert('Username already taken');
+      }
+      if (dbResult === 'Ok') {
+        const {childID} = await getChildID(username);
+        const parentID = user.parentID;
+        await addChildParentConnection(childID, parentID);
+        props.navigation.navigate('AccountSettings');
+      }
     } catch (err) {
       console.log(err);
-    } finally {
-      //No need to do anything
     }
   }
 

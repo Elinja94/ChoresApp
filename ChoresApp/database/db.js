@@ -288,25 +288,51 @@ export const addParent = (pUser, pPass) => {
 };
 
 // Child registration by Jenna
-export const addChild = (cUser, cPass, cMoney) => {
+export const addChild = (cUser, cPass) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Making password more secure, not plain text
+      if (cPass.length === 0) {
+        resolve('Empty');
+        return promise;
+      }
+      if (cUser.length === 0) {
+        resolve('Empty');
+        return promise;
+      }
       sha256(cPass).then(hash => {
         hashed = hash;
-        // Prepared statement with placeolders
+        // Checking if username is used
         tx.executeSql(
-          'insert into ' +
+          'SELECT * FROM ' +
             childTable +
-            ' (childUsername, childPassword, childMoney) values(?,?,?);',
-          // Values for the placeholders
-          [cUser, hashed, cMoney],
-          // If the transaction succeeds, this is called
-          () => {
-            resolve();
+            ' WHERE childUsername = "' +
+            cUser +
+            '"',
+          [],
+          (tx, result) => {
+            var len = result.rows.length;
+            // If username is free
+            if (len === 0) {
+              tx.executeSql(
+                'insert into ' +
+                  childTable +
+                  ' (childUsername, childPassword, childMoney) values(?,?,?);',
+                [cUser, hashed, 0],
+                () => {
+                  resolve('Ok');
+                  return promise;
+                },
+                (_, err) => {
+                  reject(err);
+                },
+              );
+            }
+            // If username is taken
+            else {
+              resolve('Username already taken');
+            }
           },
-          // If the transaction fails, this is called
-          (_, err) => {
+          (tx, err) => {
             reject(err);
           },
         );
