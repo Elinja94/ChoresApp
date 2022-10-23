@@ -408,6 +408,40 @@ export const updatePassword = (parentID, pPass) => {
   return promise;
 };
 
+// Parents changing password to their childs account by Jenna
+export const updateChildPassword = (childID, cPass) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      if (cPass.length === 0) {
+        resolve('Password length must be over 0 characters');
+        return promise;
+      }
+      sha256(cPass).then(hash => {
+        hashed = hash;
+        tx.executeSql(
+          'UPDATE ' +
+            childTable +
+            ' SET childPassword = "' +
+            hashed +
+            '"' +
+            ' WHERE childID =' +
+            childID +
+            ';',
+          [],
+          () => {
+            resolve('Ok');
+          },
+          // If the transaction fails, this is called
+          (_, err) => {
+            reject(err);
+          },
+        );
+      });
+    });
+  });
+  return promise;
+};
+
 // Connect child to parent (when registering a child) by Jenna
 export const addChildParentConnection = (childID, parentID) => {
   const promise = new Promise((resolve, reject) => {

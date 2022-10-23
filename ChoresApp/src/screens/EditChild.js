@@ -20,7 +20,16 @@ const EditChild = props => {
       alert('Invalid password');
     }
 
-    console.log(childID, password);
+    try {
+      const dbResult = await updateChildPassword(childID, password);
+      console.log('dbResult: ', dbResult);
+
+      if (dbResult === 'Ok') {
+        alert('Password changed');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
