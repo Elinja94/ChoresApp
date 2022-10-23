@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import AccountSettings from './src/screens/AccountSettings';
-import ChildForm from './src/screens/ChildForm';
+import AddChild from './src/screens/AddChild';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import ParentHomeScreen from './src/screens/ParentHomeScreen';
@@ -34,7 +34,7 @@ const App = () => {
           <Stack.Screen name="AccountSettings">
             {props => <AccountSettings {...props} setUser={setUser} />}
           </Stack.Screen>
-          <Stack.Screen name="ChildForm" component={ChildForm} />
+          <Stack.Screen name="AddChild" component={AddChild} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserContext.Provider>

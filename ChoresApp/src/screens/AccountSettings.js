@@ -76,7 +76,7 @@ const AccountSettings = props => {
           </AppButton>
         </View>
         <TouchableOpacity
-          onPress={() => props.navigation.navigate('ChildForm')}
+          onPress={() => props.navigation.navigate('AddChild')}
           style={{alignSelf: 'flex-start'}}>
           <AppText style={{color: 'red', marginTop: 30}}>Add child</AppText>
         </TouchableOpacity>

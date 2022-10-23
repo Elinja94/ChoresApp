@@ -4,7 +4,7 @@ import {UserContext} from '../../App.js';
 import {
   addChild,
   addChildParentConnection,
-  getChildId,
+  getChildID,
 } from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -14,7 +14,7 @@ import Input from '../components/Input';
 import MainContainer from '../components/MainContainer';
 import Navigation from '../components/Navigation';
 
-const ChildForm = props => {
+const AddChild = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const user = React.useContext(UserContext);
@@ -23,7 +23,7 @@ const ChildForm = props => {
     try {
       const dbResult = await addChild(username, password);
       console.log('dbResult: ' + dbResult);
-      const {childID} = await getChildId(username);
+      const {childID} = await getChildID(username);
       const parentID = user.parentID;
       await addChildParentConnection(childID, parentID);
       props.navigation.navigate('AccountSettings');
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChildForm;
+export default AddChild;
