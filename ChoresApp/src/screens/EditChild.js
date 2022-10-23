@@ -51,7 +51,11 @@ const EditChild = props => {
           </AppButton>
         </View>
       </Container>
-      <BottomBar text={user.parentUsername} navigation={props.navigation} />
+      <BottomBar
+        text={user.parentUsername}
+        navigation={props.navigation}
+        money={user.parentMoney}
+      />
     </MainContainer>
   );
 };

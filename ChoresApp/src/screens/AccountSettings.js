@@ -104,6 +104,7 @@ const AccountSettings = props => {
       <BottomBar
         text="Log out"
         navigation={props.navigation}
+        money={user.parentMoney}
         logout={true}
         setUser={() => props.setUser()}
       />

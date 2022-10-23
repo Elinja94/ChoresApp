@@ -115,7 +115,11 @@ const AddChore = props => {
           Add
         </AppButton>
       </Container>
-      <BottomBar text={user.parentUsername} navigation={props.navigation} />
+      <BottomBar
+        text={user.parentUsername}
+        navigation={props.navigation}
+        money={user.parentMoney}
+      />
     </MainContainer>
   );
 };
