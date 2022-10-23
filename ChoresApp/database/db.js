@@ -302,22 +302,48 @@ export const addParent = (pUser, pPass) => {
 export const addChild = (cUser, cPass) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Making password more secure, not plain text
+      if (cPass.length === 0) {
+        resolve('Empty');
+        return promise;
+      }
+      if (cUser.length === 0) {
+        resolve('Empty');
+        return promise;
+      }
       sha256(cPass).then(hash => {
         hashed = hash;
-        // Prepared statement with placeolders
+        // Checking if username is used
         tx.executeSql(
-          'insert into ' +
+          'SELECT * FROM ' +
             childTable +
-            ' (childUsername, childPassword, childMoney) values(?,?,?);',
-          // Values for the placeholders
-          [cUser, hashed, 0],
-          // If the transaction succeeds, this is called
-          () => {
-            resolve();
+            ' WHERE childUsername = "' +
+            cUser +
+            '"',
+          [],
+          (tx, result) => {
+            var len = result.rows.length;
+            // If username is free
+            if (len === 0) {
+              tx.executeSql(
+                'insert into ' +
+                  childTable +
+                  ' (childUsername, childPassword, childMoney) values(?,?,?);',
+                [cUser, hashed, 0],
+                () => {
+                  resolve('Ok');
+                  return promise;
+                },
+                (_, err) => {
+                  reject(err);
+                },
+              );
+            }
+            // If username is taken
+            else {
+              resolve('Username already taken');
+            }
           },
-          // If the transaction fails, this is called
-          (_, err) => {
+          (tx, err) => {
             reject(err);
           },
         );
@@ -354,6 +380,74 @@ export const getParentUser = username => {
           reject(err);
         },
       );
+    });
+  });
+  return promise;
+};
+
+// Parents changing password to their account by Jenna
+export const updatePassword = (parentID, pPass) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      if (pPass.length === 0) {
+        resolve('Password length must be over 0 characters');
+        return promise;
+      }
+      sha256(pPass).then(hash => {
+        hashed = hash;
+        tx.executeSql(
+          'UPDATE ' +
+            parentTable +
+            ' SET parentPassword = "' +
+            hashed +
+            '"' +
+            ' WHERE parentID =' +
+            parentID +
+            ';',
+          [],
+          () => {
+            resolve();
+          },
+          // If the transaction fails, this is called
+          (_, err) => {
+            reject(err);
+          },
+        );
+      });
+    });
+  });
+  return promise;
+};
+
+// Parents changing password to their childs account by Jenna
+export const updateChildPassword = (childID, cPass) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      if (cPass.length === 0) {
+        resolve('Password length must be over 0 characters');
+        return promise;
+      }
+      sha256(cPass).then(hash => {
+        hashed = hash;
+        tx.executeSql(
+          'UPDATE ' +
+            childTable +
+            ' SET childPassword = "' +
+            hashed +
+            '"' +
+            ' WHERE childID =' +
+            childID +
+            ';',
+          [],
+          () => {
+            resolve('Ok');
+          },
+          // If the transaction fails, this is called
+          (_, err) => {
+            reject(err);
+          },
+        );
+      });
     });
   });
   return promise;
@@ -557,7 +651,9 @@ export const addChore = (childID, choreID) => {
     db.transaction(tx => {
       // Prepared statement with placeolders
       tx.executeSql(
-        'insert into ' + childChoreTable + ' (child, chore, done) values(?,?, ?);',
+        'insert into ' +
+          childChoreTable +
+          ' (child, chore, done) values(?,?, ?);',
         // Values for the placeholders
         [childID, choreID, false],
         // If the transaction succeeds, this is called
@@ -621,15 +717,11 @@ export const getAllChildChore = () => {
 };
 
 // Get child's chores from childchore by Sonja
-export const getChildChore = (childID) => {
+export const getChildChore = childID => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        'select * from ' +
-          childChoreTable +
-          ' WHERE child = "' +
-          childID +
-          '"',
+        'select * from ' + childChoreTable + ' WHERE child = "' + childID + '"',
         [],
         (tx, result) => {
           let chores = [];
@@ -674,7 +766,6 @@ export const updateDone = (id, done) => {
   });
   return promise;
 };
-
 
 // Only for testing
 export const all = () => {

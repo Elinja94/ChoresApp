@@ -4,19 +4,24 @@ import {COLORS} from '../colors';
 import AppButton from './AppButton';
 import AppText from './AppText';
 
-const BottomBar = ({navigation, text, money}) => {
+const BottomBar = ({navigation, text, money, logout, setUser}) => {
+  const handlePress = () => {
+    if (logout) {
+      setUser({});
+      navigation.navigate('Login');
+    } else {
+      navigation.navigate('AccountSettings');
+    }
+  };
+
   return (
     <View style={styles.bar}>
-      <Pressable style={styles.money} onPress={() => navigation.navigate("MoneyForm")}>
+      <Pressable
+        style={styles.money}
+        onPress={() => navigation.navigate('MoneyForm')}>
         <AppText>Money: {money} €</AppText>
       </Pressable>
-      <AppButton
-        style={styles.account}
-        onPress={
-          text !== 'Log out'
-            ? () => navigation.navigate('AccountSettings')
-            : () => navigation.navigate('Login')
-        }>
+      <AppButton style={styles.account} onPress={() => handlePress()}>
         {text}
       </AppButton>
     </View>
