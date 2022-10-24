@@ -1,6 +1,7 @@
 // Made by Sonja
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, Pressable} from 'react-native';
+import {COLORS} from '../colors';
 import {addParent} from '../../database/db.js';
 import AppButton from '../components/AppButton';
 import AppText from '../components/AppText';
@@ -68,9 +69,10 @@ const styles = StyleSheet.create({
     fontFamily: 'fuzzybubbles',
     fontSize: 60,
     marginBottom: 24,
+    color: COLORS.logo
   },
   link: {
-    color: 'red',
+    color: COLORS.link,
     flex: 2,
   },
   submitButtonContainer: {

@@ -78,7 +78,7 @@ const AccountSettings = props => {
         <TouchableOpacity
           onPress={() => props.navigation.navigate('AddChild')}
           style={{alignSelf: 'flex-start'}}>
-          <AppText style={{color: 'red', marginTop: 30}}>Add child</AppText>
+          <AppText style={{color: COLORS.link, marginTop: 30}}>Add child</AppText>
         </TouchableOpacity>
         <Heading style={styles.heading}>Children list</Heading>
         <FlatList
