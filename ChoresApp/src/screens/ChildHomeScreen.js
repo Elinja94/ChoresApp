@@ -68,6 +68,7 @@ const ChildHomeScreen = props => {
         await updateDone(id, true);
         getChore();
         getChildChores();
+        setAll();
     }
 
     // Setting chore undone
@@ -75,6 +76,7 @@ const ChildHomeScreen = props => {
         await updateDone(id, false);
         getChore();
         getChildChores();
+        setAll();
     }
 
     useEffect(() => {

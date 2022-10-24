@@ -28,7 +28,7 @@ const ParentHomeScreen = props => {
   const [childChores, setChildChore] = useState([]);
   const [everything, setEverything] = useState([]);
   const [modalProps, setModalProps] = useState({});
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Getting all the parent's children by Jenna
   async function getChildren() {
@@ -123,6 +123,8 @@ const ParentHomeScreen = props => {
       await updateMoney(user.parentID, updatedParentMoney);
       await updateChildMoney(childID, updatedChildMoney);
       user.parentMoney = updatedParentMoney;
+      setModalVisible(false);
+      setAll();
     } catch (err) {
       console.log(err);
     }

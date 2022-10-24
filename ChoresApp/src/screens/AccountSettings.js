@@ -55,6 +55,7 @@ const AccountSettings = props => {
     try {
       const dbResult = await updatePassword(user.parentID, newPassword);
       console.log('dbResult: ', dbResult);
+      alert('Pasword changed');
     } catch (err) {
       console.log(err);
     }
