@@ -94,6 +94,7 @@ const ChildHomeScreen = props => {
                 <AppButton style={styles.refreshButton} onPress={() => setAll()}>↺</AppButton>
                 <Heading style={styles.heading}>Chores List</Heading>
             </View>
+            <AppButton onPress={() => props.navigation.navigate('PricesList')}>Prices</AppButton>
             <Container style={{width: '80%', height:'80%'}}>
                 <AppText style={{textAlign:'center'}}>Green = done Red = notdone</AppText>
                 <FlatList

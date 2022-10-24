@@ -154,6 +154,7 @@ const ParentHomeScreen = props => {
           +
         </AppButton>
       </View>
+      <AppButton onPress={() => props.navigation.navigate('PricesList')}>Prices</AppButton>
       <Container style={{width: '80%', height: '85%'}}>
         <AppText style={{textAlign: 'center'}}>
           Green = done Red = notdone
