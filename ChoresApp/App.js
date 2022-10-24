@@ -12,6 +12,7 @@ import ChildHomeScreen from './src/screens/ChildHomeScreen';
 import MoneyForm from './src/screens/MoneyForm';
 import AddChore from './src/screens/AddChore';
 import EditChild from './src/screens/EditChild';
+import PricesList from './src/screens/PricesList';
 
 // To create and check connection to database
 init()
@@ -49,6 +50,7 @@ const App = () => {
           </Stack.Screen>
           <Stack.Screen name="AddChild" component={AddChild} />
           <Stack.Screen name="EditChild" component={EditChild} />
+          <Stack.Screen name="PricesList" component={PricesList} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserContext.Provider>
