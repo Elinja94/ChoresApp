@@ -1,0 +1,64 @@
+What you need to run this app?
+    Node.js
+    Command Prompt (or something similiar)
+    Java JDK 11+
+    Android studio with Android SDK and Emulator (or something smiliar)
+
+This app works with android (ios not tested).
+
+What is this app?
+This app is designed for parents and their children.
+Parent can add chore to their child and child can mark them done.
+After the chore is marked done parent can pay their children and children will receive the money.
+Everything related to database are stored in the device!
+
+As a parent:
+    You can register your account.
+    You can login.
+    You can add money to your account.
+    You can add a child.
+    You can add a chore to your child.
+    You can pay your child from doing chores.
+    You can change your password.
+    You can change your child's password.
+    You can log out.
+
+As a child:
+    You can login.
+    You can mark tasks done.
+    You can log out.
+
+Before you run the app!
+    You need to install everything needed to run the app.
+
+First go to the file location of the project.
+
+Then run these commands:
+    npm install react-native-sqlite-storage
+    npm install @react-navigation/native
+    npm install @react-navigation/native-stack
+    npm install react
+    npm install react-native
+    npm install react-native-modal
+    npm install react-native-modal-dropdown
+    npm install react-native-safe-area-context
+    npm install react-native-screens
+    npm install react-native-sha256
+    npm install react-navigation
+    npm install @babel/core
+    npm install @babel/runtime
+    npm install @react-native-community/eslint-config
+    npm install babel-jest
+    npm install eslint
+    npm install jest
+    npm install metro-react-native-babel-preset
+    npm install react-test-renderer
+DONT FORGET TO INSTALL THIS
+    npx react-native-asset
+
+OR You can just:
+    npm install
+    npx react-native-asset
+(This might not give you everything)
+
+App might take sometime to load, don't worry.
