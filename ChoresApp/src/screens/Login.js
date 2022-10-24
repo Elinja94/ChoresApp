@@ -113,9 +113,10 @@ const styles = StyleSheet.create({
     fontFamily: 'fuzzybubbles',
     fontSize: 60,
     marginBottom: 24,
+    color: COLORS.logo
   },
   link: {
-    color: 'red',
+    color: COLORS.link,
     flex: 2,
   },
   submitButtonContainer: {

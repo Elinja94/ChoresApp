@@ -1,15 +1,14 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {COLORS} from '../colors';
+import {StyleSheet, ImageBackground} from 'react-native';
 
 const MainContainer = ({children, style}) => {
-  return <View style={[styles.background, style]}>{children}</View>;
+  return <ImageBackground source={require('../assets/img/bg.png')} resizeMode="cover" style={[styles.image, style]}>{children}</ImageBackground>;
 };
 
 const styles = StyleSheet.create({
-  background: {
+  image: {
+    flex: 1,
     alignItems: 'center',
-    backgroundColor: COLORS.background,
     height: '100%',
   },
 });

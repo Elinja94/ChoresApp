@@ -1,8 +1,9 @@
 export const COLORS = {
-  background: '#7d7fc9',
-  black: '#333',
-  darkBlue: '#268696',
-  primary: '#57c9d4',
-  secondary: '#f7ed94',
-  white: '#fff',
+  black: '#1c1c1f',
+  darkBlue: '#59829c',
+  logo: '#191624',
+  link: '#b309af',
+  primary: '#8ab8d4',
+  secondary: '#d1cc75',
+  white: '#e3e3e3',
 };
