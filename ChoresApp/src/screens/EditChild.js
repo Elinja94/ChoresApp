@@ -26,6 +26,7 @@ const EditChild = props => {
 
       if (dbResult === 'Ok') {
         alert('Password changed');
+        props.navigation.navigate('AccountSettings')
       }
     } catch (err) {
       console.log(err);
