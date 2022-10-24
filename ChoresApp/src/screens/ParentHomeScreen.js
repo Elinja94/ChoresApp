@@ -123,7 +123,6 @@ const ParentHomeScreen = props => {
       await updateMoney(user.parentID, updatedParentMoney);
       await updateChildMoney(childID, updatedChildMoney);
       user.parentMoney = updatedParentMoney;
-      setModalVisible(false);
       setAll();
     } catch (err) {
       console.log(err);
